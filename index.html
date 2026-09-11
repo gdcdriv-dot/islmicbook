@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Islamic Bangla Book - কুরআন, হাদিস ও ইসলামিক কিতাব</title>
+    <!-- FontAwesome আইকন লাইব্রেরি -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= বেসিক স্টাইল ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; } 
+        body { background: linear-gradient(135deg, #022a1c 0%, #04432d 100%); color: #ffffff; font-family: 'Kalpurush', 'Helvetica Neue', Arial, sans-serif; overflow-x: hidden; min-height: 100vh; }
+        .navbar { background: rgba(2, 34, 22, 0.95); padding: 15px 20px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .menu-icon { font-size: 28px; cursor: pointer; color: #d4af37; margin-right: 20px; transition: 0.3s; }
+        .logo { color: #d4af37; font-size: 22px; font-weight: bold; text-decoration: none; }
+        .logo span { color: #ffffff; }
+        .sidebar { height: 100%; width: 280px; position: fixed; z-index: 2000; top: 0; left: -280px; background-color: #011810; overflow-x: hidden; transition: 0.4s ease; padding-top: 60px; border-right: 2px solid #d4af37; }
+        .sidebar a { padding: 15px 20px; text-decoration: none; font-size: 18px; color: #d1d1d1; display: block; border-bottom: 1px solid #033020; transition: 0.3s; }
+        .sidebar .closebtn { position: absolute; top: 10px; right: 20px; font-size: 36px; color: #d4af37; cursor: pointer; }
+        .overlay { position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(0,0,0,0.7); z-index: 1500; }
+
+        /* ================= মোবাইল ও পিসি রেসপন্সিভ হরিজন্টাল বাটন মেনুবার ================= */
+        .category-tab-container { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding: 12px 15px; background: rgba(1, 24, 16, 0.9); border-bottom: 1px solid #054f35; position: sticky; top: 60px; z-index: 90; }
+        .cat-btn { cursor: pointer; color: #fff; background: #033624; border: 1px solid #d4af37; padding: 8px 14px; border-radius: 6px; font-size: 14px; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; outline: none; }
+        .cat-btn:hover, .cat-btn.active-tab { background: #d4af37; color: #022a1c; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4); transform: translateY(-2px); }
+
+        .section-title { margin: 20px 20px 10px; font-size: 18px; font-weight: bold; color: #d4af37; display: flex; align-items: center; }
+        .row-container { display: flex; flex-wrap: wrap; justify-content: center; padding: 10px 15px 30px; gap: 15px; }
+        .card { width: 140px; cursor: pointer; position: relative; background: #033624; padding: 8px; border-radius: 8px; border: 1px solid #054f35; transition: transform 0.3s ease; }
+        .card img { width: 100%; height: 190px; object-fit: cover; border-radius: 6px; }
+        .card .title { margin-top: 8px; font-size: 13px; color: #fff; font-weight: bold; text-align: center; }
+
+        .list-container { padding: 10px 20px 30px; max-width: 800px; margin: 0 auto; }
+        .list-item { display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); margin-bottom: 12px; padding: 10px; border-radius: 8px; border-left: 4px solid transparent; cursor: pointer; transition: 0.3s; }
+        .list-number { background: #d4af37; color: #022a1c; min-width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 13px; margin-right: 12px; }
+        .list-thumbnail { width: 45px; height: 65px; object-fit: cover; border-radius: 4px; margin-right: 12px; border: 1px solid #d4af37; }
+        .list-details { flex-grow: 1; }
+        .list-details .title { font-size: 15px; color: #ffffff; font-weight: bold; }
+        .list-details .subtitle { font-size: 12px; color: #aaaaaa; margin-top: 3px; }
+        .click-icon { color: #d4af37; font-size: 18px; opacity: 0.7; }
+
+        /* ================= আপগ্রেডেড স্মার্ট পপ-আপ মডাল ================= */
+        .modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 2500; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; padding: 15px; }
+        .modal.show { opacity: 1; visibility: visible; }
+        .modal-content { background: linear-gradient(to bottom, #033624, #011810); padding: 25px 20px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; position: relative; border: 2px solid #d4af37; transform: scale(0.8); transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .modal.show .modal-content { transform: scale(1); }
+        .close-btn { position: absolute; top: 8px; right: 15px; font-size: 30px; color: #d4af37; cursor: pointer; }
+        .modal-img { width: 150px; height: 215px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; border: 2px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .modal-title { font-size: 19px; font-weight: bold; margin-bottom: 4px; color: #fff; }
+        .modal-subtitle { color: #d4af37; margin-bottom: 18px; font-size: 14px; }
+        audio { width: 100%; margin-bottom: 15px; outline: none; border-radius: 25px; height: 45px; }
+        
+        .modal-buttons { display: flex; gap: 12px; width: 100%; justify-content: center; margin-bottom: 20px; }
+        .btn { flex: 1; padding: 11px 0; border: none; cursor: pointer; border-radius: 25px; font-size: 14px; text-decoration: none; display: inline-flex; justify-content: center; align-items: center; gap: 6px; font-weight: bold; transition: 0.3s; text-align: center; }
+        .btn-read { background-color: #ffffff; color: #022a1c; }
+        .btn-download { background-color: #d4af37; color: #022a1c; }
+
+        /* সোশ্যাল ও যোগাযোগ সেকশন */
+        .modal-divider { height: 1px; background: rgba(212, 175, 55, 0.3); margin-bottom: 15px; }
+        .contact-title { font-size: 12px; color: #aaaaaa; margin-bottom: 10px; letter-spacing: 1px; }
+        .social-icons { display: flex; justify-content: center; gap: 14px; }
+        .social-icon { width: 38px; height: 38px; background: rgba(255, 255, 255, 0.08); border: 1px solid #d4af37; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #d4af37; font-size: 17px; text-decoration: none; transition: 0.3s; }
+        .social-icon:hover { background: #d4af37; color: #022a1c; transform: scale(1.1); }
+
+        /* ================= ফুলস্ক্রিন ইন-পেজ PDF রিডার ================= */
+        .fullpage-reader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #011810;
+            z-index: 5000;
+            display: none;
+            flex-direction: column;
+        }
+        .fullpage-reader.active {
+            display: flex;
+        }
+        .reader-toolbar {
+            background: rgba(2, 34, 22, 0.98);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d4af37;
+        }
+        .reader-btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        .reader-nav-btn {
+            background: #033624;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .reader-nav-btn:hover {
+            background: #d4af37;
+            color: #022a1c;
+        }
+        .reader-frame {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+            background: #ffffff;
+        }
+
+        @media (min-width: 768px) { 
+            .cat-btn { font-size: 16px; padding: 10px 18px; }
+            .logo { font-size: 26px; }
+            .section-title { font-size: 22px; margin-left: 30px; }
+            .row-container { justify-content: center; gap: 25px; max-width: 1200px; margin: 0 auto; }
+            .card { width: 180px; padding: 12px; }
+            .card img { height: 250px; }
+            .card .title { font-size: 15px; }
+            .card:hover { transform: scale(1.08) translateY(-5px); border-color: #d4af37; box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 10; }
+            .list-item:hover { background: rgba(212, 175, 55, 0.15); border-left: 4px solid #d4af37; transform: translateX(5px); }
+            .menu-icon:hover { transform: scale(1.1); color: #fff; }
+            .sidebar a:hover { color: #d4af37; background-color: #022a1c; padding-left: 30px; }
+            .btn-read:hover { background-color: #e0e0e0; transform: translateY(-2px); }
+            .btn-download:hover { background-color: #f1c40f; transform: translateY(-2px); }
+        }
+
+        .page-section { display: none; }
+        .active-section { display: block; }
+        .fade-in-section { animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
+
+    <!-- ================= সাইডবার মেনু ================= -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#" onclick="switchCategory('authors-category')">👳 আলেমগণের কিতাব</a>
+        <a href="#" onclick="switchCategory('new-books-category')">🆕 নতুন বইসমূহ</a>
+        <a href="#" onclick="switchCategory('quran-category')">📖 কুরআন ও তাফসীর</a>
+        <a href="#" onclick="switchCategory('hadith-category')">📚 হাদিস ও অন্যান্য গ্রন্থ</a>
+        <a href="#" onclick="switchCategory('bangla-audio-category')">🎧 আল-কুরআন অডিও</a> 
+    </div>
+
+    <header class="navbar">
+        <span class="menu-icon" onclick="openNav()">&#9776;</span>
+        <a href="#" class="logo" onclick="switchCategory('authors-category')">Islamic<span>Book</span></a>
+    </header>
+
+    <!-- ================= রেসপন্সিভ হরিজন্টাল বাটন মেনুবার ================= -->
+    <div class="category-tab-container">
+        <button class="cat-btn" id="tab-authors" onclick="switchCategory('authors-category')">👳 আলেমগণের কিতাব</button>
+        <button class="cat-btn" id="tab-new" onclick="switchCategory('new-books-category')">🆕 নতুন বইসমূহ</button>
+        <button class="cat-btn" id="tab-quran" onclick="switchCategory('quran-category')">📖 কুরআন ও তাফসীর</button>
+        <button class="cat-btn" id="tab-hadith" onclick="switchCategory('hadith-category')">📚 হাদিস ও অন্যান্য গ্রন্থ</button>
+        <button class="cat-btn" id="tab-audio" onclick="switchCategory('bangla-audio-category')">🎧 আল-কুরআন অডিও</button>
+    </div>
+
+    <!-- ================= ১. আলেমগণ ক্যাটাগরি ================= -->
+    <div id="authors-category" class="page-section active-section fade-in-section">
+        <div class="section-title">প্রখ্যাত আলেম ও লেখকগণ</div>
+        <div class="row-container">
+            <div class="card" onclick="openListView('ibn_taymiyyah', 'ইমাম ইবনে তাইমিয়া', 'authors-category')"><img src="https://files.catbox.moe/r4vcxt.jpg" alt="Ibn Taymiyyah"><div class="title">ইমাম ইবনে তাইমিয়া</div></div>
+            <div class="card" onclick="openListView('albani', 'নাসির উদ্দিন আলবানী', 'authors-category')"><img src="https://files.catbox.moe/g7ab3k.jpg" alt="Albani"><div class="title">নাসির উদ্দিন আলবানী</div></div>
+            <div class="card" onclick="openListView('asadullah_ghalib', 'ড. আসাদুল্লাহ আল-গালিব', 'authors-category')"><img src="https://files.catbox.moe/9frr9q.jpg" alt="Asadullah Ghalib"><div class="title">ড. আসাদুল্লাহ আল-গালিব</div></div>
+            
+            <div class="card"onclick="openListView('Imam_Bayhaqi', 'ইমাম বাইহাকী', 'authors-category')"><img src="https://files.catbox.moe/mt8mrt.jpg" alt="Asadullah Ghalib"><div class="title">ইমাম বাইহাকী</div></div>
+            
+            <div class="card" onclick="openListView('khandaker_jahangir', 'ড. খন্দকার জাহাঙ্গীর', 'authors-category')"><img src="https://i.ibb.co/RGphSHzY/image-1785493669892.png" alt="Khandaker Jahangir"><div class="title">ড. খন্দকার জাহাঙ্গীর</div></div>
+            <div class="card" onclick="openListView('muzaffar_mohsin', 'ড. মুজাফফর বিন মহসিন', 'authors-category')"><img src="https://files.catbox.moe/t6l996.jpg" alt="Muzaffar Mohsin"><div class="title">ড. মুজাফফর বিন মহসিন</div></div>
+            <div class="card" onclick="openListView('dr_zakir', 'ড. জাকির নায়েক', 'authors-category')"><img src="https://i.ibb.co/HfYxQNPH/image-1785493963248.png" alt="Zakir Naik"><div class="title">ড. জাকির নায়েক</div></div>
+            <div class="card" onclick="openListView('abdur_razzak', 'আব্দুর রাজ্জাক বিন ইউসুফ', 'authors-category')"><img src="https://files.catbox.moe/65m73s.jpg" alt="Abdur Razzak"><div class="title">আব্দুর রাজ্জাক বিন ইউসুফ</div></div>
+            
+            <div class="card" onclick="openListView('rahul_hossain', 'ব্রাদার রাহুল হোসেন', 'authors-category')"><img src="https://files.catbox.moe/cwtz6k.jpg" alt="Rahul Hossain"><div class="title">ব্রাদার রাহুল হোসেন</div></div>
+            <div class="card" onclick="openListView('nouman_ali_khan', 'নোমান আলী খান', 'authors-category')"><img src="https://i.ibb.co/9m51gghv/image-1785494687958.png" alt="Alem"><div class="title">নোমান আলী খান</div></div>
+            <div class="card" onclick="openListView('mizanur_rahman_azhari', 'মিজানুর রহমান আজহারী', 'authors-category')"><img src="https://files.catbox.moe/ew638s.png" alt="Alem"><div class="title">মিজানুর রহমান আজহারী</div></div>
+        </div>
+    </div>
+
+    <!-- ================= ০. নতুন বই ক্যাটাগরি ================= -->
+    <div id="new-books-category" class="page-section fade-in-section">
+        <div class="section-title">নতুন যুক্ত হওয়া বইসমূহ</div>
+        <div class="row-container">
+            <div class="card" onclick="openListView('new_book_1', 'শরঈ মানদণ্ডে মুনাফার', 'new-books-category')">
+                <img src="https://i.ibb.co/zTzVt8YT/IMG-20200426-112049.jpg" alt="New Book 1">
+                <div class="title">দোয়া ও জিকির</div>
+            </div>
+            
+            <div class="card" onclick="openListView('new_book_2', 'তবলীগ জামাতের গোমর ফাস', 'new-books-category')">
+                <img src="https://archive.org/download/20260804_20260804_0956/1585394349852316-4_thumb.jpg" alt="New Book 2">
+                <div class="title">তবলীগ জামাতের গোমর ফাস</div>
+            </div>
+           
+                <div class="card" onclick="openListView('new_book_3', 'তবলীগ জামাতের গোমর ফাস', 'new-books-category')">
+                <img src="https://i.ibb.co/YT8MhQRg/image-1786462628640.jpg" alt="New Book 3">
+                <div class="title">জান্নাত ও জাহান্নাম</div>
+            </div>  
+        </div>
+    </div>
+
+    <!-- ================= ৩. কুরআন ও তাফসীর ক্যাটাগরি ================= -->
+    <div id="quran-category" class="page-section fade-in-section">
+        <div class="section-title">পবিত্র কুরআন ও তাফসীর</div>
+        <div class="row-container">
+            <div class="card" onclick="openListView('ibn_kathir', 'তাফসীর ইবনে কাসীর', 'quran-category')"><img src="https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg" alt="Ibn Kathir"><div class="title">তাফসীর ইবনে কাসীর</div></div>
+            <div class="card" onclick="openListView('zakaria', ' তাফসীর জাকারিয়া ', 'quran-category')"><img src="https://files.catbox.moe/q7bn23.png" alt="Zakaria"><div class="title">তাফসীর জাকারিয়া</div></div>
+            <div class="card" onclick="openListView('jalalain', ' তাফসীরুল জালালাইন ', 'quran-category')"><img src="https://files.catbox.moe/l9hcgx.png" alt="Jalalain"><div class="title">তাফসীরে জালালাইন</div></div>
+            <div class="card" onclick="openListView('mazhari', ' তাফসীরে মাযহারী ','quran-category')"><img src="https://files.catbox.moe/gt11s6.png" alt="Mazhari"><div class="title">তাফসীরে মাযহারী</div></div>
+            <div class="card" onclick="openListView('ibn_abbas','তাফসীর ইবনে আব্বাস   ' ,    'quran-category')"><img src="https://files.catbox.moe/mrdte5.png" alt="Ibn Abbas"><div class="title">তাফসীর ইবনে আব্বাস</div></div>
+            <div class="card" onclick="openListView('Tafsir_Tabari','তাফসীর  তাবারী' ,    'quran-category')"><img src="https://files.catbox.moe/66muqb.jpg" alt="Tafsir Tabari"><div class="title">তাফসীর  তাবারী</div></div>
+
+        </div>
+    </div>
+
+    <!-- ================= ২. হাদিস ক্যাটাগরি ================= -->
+    <div id="hadith-category" class="page-section fade-in-section">
+        <div class="section-title">হাদিস ও অন্যান্য গ্রন্থসমূহ</div>
+        <div class="row-container">
+            <div class="card" onclick="openListView('bukhari', 'সহীহ বুখারী', 'hadith-category')"><img src="https://files.catbox.moe/fducpy.png" alt="Bukhari"><div class="title">সহীহ বুখারী</div></div>
+            <div class="card" onclick="openListView('bukhari2', 'সহীহ বুখারী', 'hadith-category')"><img src="https://files.catbox.moe/3qu0l3.png" alt="Bukhari2"><div class="title">সহীহ বুখারী</div></div>
+            <div class="card" onclick="openListView('muslim2', 'সহীহ মুসলিম', 'hadith-category')"><img src="https://files.catbox.moe/1j930s.png" alt="Muslim2"><div class="title">সহীহ মুসলিম</div></div>
+            <div class="card" onclick="openListView('muslim', 'সহীহ মুসলিম', 'hadith-category')"><img src="https://files.catbox.moe/o4rp1d.png" alt="Muslim"><div class="title">সহীহ মুসলিম</div></div>
+            <div class="card" onclick="openListView('abu_dawud', 'আবু দাউদ শরীফ', 'hadith-category')"><img src="https://files.catbox.moe/k86xsw.jpeg" alt="Abu Dawud"><div class="title">আবু দাউদ শরীফ</div></div>
+            <div class="card" onclick="openListView('abu_dawud_2', 'আবু দাউদ শরীফ', 'hadith-category')"><img src="https://files.catbox.moe/vgcufd.jpg" alt="Abu Dawud_2"><div class="title">আবু দাউদ শরীফ</div></div>
+            <div class="card" onclick="openListView('mishkat', ' মিশকাতুল মাসাবীহ', 'hadith-category')"><img src="https://files.catbox.moe/gpoo5x.png" alt="Mishkat"><div class="title">মিশকাতুল মাসাবীহ</div></div>
+            <div class="card" onclick="openListView('tirmidhi', ' সুনান আত-তিরমিজী', 'hadith-category')"><img src="https://files.catbox.moe/efzte3.png" alt="Tirmidhi"><div class="title">সুনান আত-তিরমিজী</div></div>
+            <div class="card" onclick="openListView('nasai', ' সুনান নাসাঈ শরীফ', 'hadith-category')"><img src="https://files.catbox.moe/86baj6.png" alt="Nasai"><div class="title">সুনান নাসাঈ</div></div>
+            <div class="card" onclick="openListView('ibn_majah', ' সুনান ইবনু মাজাহ', 'hadith-category')"><img src="https://files.catbox.moe/5nxgmi.png" alt="Ibn Majah"><div class="title">সুনান ইবনু মাজাহ</div></div>
+            <div class="card" onclick="openListView('daraqutni', ' সুনান আদ-দারাকুতনী', 'hadith-category')"><img src="https://files.catbox.moe/op7nvh.jpg" alt="Daraqutni"><div class="title">সুনান আদ-দারাকুতনী</div></div>
+            <div class="card" onclick="openListView('al_bidaya_wal_nihaya','আল বিদায়া ওয়ান-নিহায়া', 'hadith-category')"><img src="https://files.catbox.moe/9fixog.jpg" alt="al bidaya wal nihaya"><div class="title">আল বিদায়া ওয়ান নিহায়া</div></div>
+            <div class="card" onclick="openListView('Imam_Malik','মুয়াত্তা-ইমাম-মালিক', 'hadith-category')"><img src="https://files.catbox.moe/62we4l.jpg" alt="al bidaya wal nihaya"><div class="title">মুয়াত্তা-ইমাম-মালিক</div></div>
+        
+
+        </div>
+    </div>
+    
+    <!-- ================= ৪. বাংলা অনুবাদ অডিও ================= -->
+    <div id="bangla-audio-category" class="page-section fade-in-section">
+        <div class="section-title">আল-কুরআন অডিও</div>
+        <div class="row-container">
+            <div class="card" onclick="openListView('quran_audio', 'কুরআন অডিও (১১৪ সূরা)', 'bangla-audio-category')">
+                <img src="https://i.ibb.co/wFwj3F0B/image.png" alt="Quran Audio">
+                <div class="title">কুরআন অডিও (১১৪ সূরা)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ডাইনামিক লিস্ট ভিউ পেজ ================= -->
+    <div id="list-view-section" class="page-section">
+        <div class="section-title">
+            <span class="cat-btn" id="back-btn" style="margin-right: 15px;">&#8592; পেজে ফিরুন</span> 
+            <span id="list-title">তালিকাসমূহ</span>
+        </div>
+        <div class="list-container" id="list-container"></div>
+    </div>
+
+    <!-- ================= আপগ্রেডেড স্মার্ট পপ-আপ মডাল ================= -->
+    <div id="contentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="modal-img" class="modal-img" src="" alt="Cover">
+            <h2 id="modal-title" class="modal-title">নাম</h2>
+            <p id="modal-subtitle" class="modal-subtitle">লেখক/ক্বারী</p>
+            
+            <!-- অডিও প্লেয়ার -->
+            <audio id="modal-audio-player" controls style="display: none;"><source src="" type="audio/mpeg"></audio>
+            
+            <!-- পড়ুন ও ডাউনলোড বাটন -->
+            <div class="modal-buttons">
+                <button id="modal-read-btn" class="btn btn-read">
+                    <i class="fa-solid fa-book-open"></i> পড়ুন
+                </button>
+                <button id="modal-download-btn" class="btn btn-download">
+                    <i class="fa-solid fa-download"></i> ডাউনলোড
+                </button>
+            </div>
+
+            <!-- সোশ্যাল ও যোগাযোগ আইকনসমূহ -->
+            <div class="modal-divider"></div>
+            <div class="contact-title">বইটি লোড হতে কিছুটা সময় লাগতে পারে, অনুগ্রহ করে অপেক্ষা করুন।</div>
+            <div class="social-icons">
+                <a href="https://wa.me/" target="_blank" class="social-icon" title="হোয়াটসঅ্যাপ"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="https://t.me/" target="_blank" class="social-icon" title="টেলিগ্রাম"><i class="fa-brands fa-telegram"></i></a>
+                <a href="https://facebook.com/" target="_blank" class="social-icon" title="ফেসবুক"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="mailto:contact@example.com" class="social-icon" title="ইমেইল"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ফুলস্ক্রিন ইন-পেজ PDF রিডার (পেজ ত্যাগ করবে না) ================= -->
+    <div id="fullpage-reader" class="fullpage-reader">
+        <div class="reader-toolbar">
+            <button class="reader-nav-btn" onclick="closeInPageReader()">
+                <i class="fa-solid fa-arrow-left"></i> পেজে ফিরুন
+            </button>
+            <span id="reader-book-title" style="color: #d4af37; font-weight: bold; font-size: 15px;">কিতাব পড়া হচ্ছে</span>
+            <div class="reader-btn-group">
+                <button class="reader-nav-btn" onclick="refreshReader()">
+                    <i class="fa-solid fa-arrows-rotate"></i> রিফ্রেশ
+                </button>
+            </div>
+        </div>
+        <iframe id="reader-iframe" class="reader-frame" src=""></iframe>
+    </div>
+
+    <!-- ================= JavaScript (ডাটাবেস ও লজিক) ================= -->
+    <script>
+        let currentReadingPdfUrl = "";
+
+        function openNav() { document.getElementById("mySidebar").style.left = "0"; document.getElementById("overlay").style.display = "block"; }
+        function closeNav() { document.getElementById("mySidebar").style.left = "-280px"; document.getElementById("overlay").style.display = "none"; }
+
+        function switchCategory(sectionId) {
+            closeNav();
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-section'));
+            const activeSec = document.getElementById(sectionId);
+            activeSec.classList.add('active-section');
+            activeSec.classList.remove('fade-in-section');
+            void activeSec.offsetWidth;
+            activeSec.classList.add('fade-in-section');
+
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active-tab'));
+            if(sectionId === 'authors-category') document.getElementById('tab-authors')?.classList.add('active-tab');
+            if(sectionId === 'new-books-category') document.getElementById('tab-new')?.classList.add('active-tab');
+            if(sectionId === 'quran-category') document.getElementById('tab-quran')?.classList.add('active-tab');
+            if(sectionId === 'hadith-category') document.getElementById('tab-hadith')?.classList.add('active-tab');
+            if(sectionId === 'bangla-audio-category') document.getElementById('tab-audio')?.classList.add('active-tab');
+        }
+
+        window.onload = function() {
+            switchCategory('authors-category');
+        };
+
+        // ================= ইন-পেজ PDF রিডার কন্ট্রোলার =================
+        function openInPageReader(readUrl, bookTitle) {
+            closeModal();
+            currentReadingPdfUrl = readUrl;
+            document.getElementById('reader-book-title').innerText = bookTitle;
+
+            let finalUrl = readUrl;
+            
+            if (readUrl.includes('drive.google.com')) {
+                finalUrl = readUrl.replace(/\/view.*/, '/preview');
+            } else if (!readUrl.includes('archive.org/embed')) {
+                finalUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(readUrl) + '&embedded=true';
+            }
+
+            document.getElementById('reader-iframe').src = finalUrl;
+            document.getElementById('fullpage-reader').classList.add('active');
+        }
+
+        function closeInPageReader() {
+            document.getElementById('fullpage-reader').classList.remove('active');
+            document.getElementById('reader-iframe').src = "";
+            currentReadingPdfUrl = "";
+        }
+
+        function refreshReader() {
+            if (currentReadingPdfUrl) {
+                const iframe = document.getElementById('reader-iframe');
+                let freshUrl = currentReadingPdfUrl;
+                
+                if (currentReadingPdfUrl.includes('drive.google.com')) {
+                    freshUrl = currentReadingPdfUrl.replace(/\/view.*/, '/preview');
+                } else if (!currentReadingPdfUrl.includes('archive.org/embed')) {
+                    freshUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(currentReadingPdfUrl) + '&embedded=true&t=' + Date.now();
+                } else {
+                    freshUrl = currentReadingPdfUrl + (currentReadingPdfUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+                }
+                iframe.src = freshUrl;
+            }
+        }
+
+        // ================= পেজ রিফ্রেশ ছাড়া বা নতুন ট্যাব না খুলে ডাউনলোড =================
+        function startDirectDownload(downloadUrl, fileName) {
+            if (!downloadUrl || downloadUrl === '#' || downloadUrl === '') {
+                alert("দুঃখিত, ডাউনলোড লিংক এখনও যুক্ত করা হয়নি!");
+                return;
+            }
+
+            const dlButton = document.getElementById('modal-download-btn');
+            const originalHTML = dlButton.innerHTML;
+            
+            dlButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> শুরু হচ্ছে...';
+            dlButton.style.pointerEvents = 'none';
+
+            // ১. গুগল ড্রাইভের লিংক হলে ডাইরেক্ট ডাউনলোড লিংকে কনভার্ট করা
+            if (downloadUrl.includes('drive.google.com/file/d/')) {
+                const match = downloadUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+                }
+            }
+
+            // ২. Hidden Anchor tag দিয়ে ডাউনলোড ট্রিগার করা (নতুন পেজ খুলবে না)
+            const tempLink = document.createElement('a');
+            tempLink.href = downloadUrl;
+            tempLink.download = fileName || 'Islamic_Book.pdf';
+            // এখানে target="_blank" দেওয়া হয়নি, তাই বর্তমান পেজেই ডাউনলোড শুরু হবে এবং ব্রাউজার পেজটি সরাবে না।
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            document.body.removeChild(tempLink);
+
+            // কিছুক্ষণ পর বাটনটি আগের অবস্থায় ফিরে আসবে
+            setTimeout(() => {
+                dlButton.innerHTML = originalHTML;
+                dlButton.style.pointerEvents = 'auto';
+            }, 2000);
+        }
+
+        // ================= মেইন ডাটাবেস =================
+        const mainDatabase = {
+            
+            // --- নতুন বইয়ের লিস্ট ---
+            'new_book_1': [
+                { type: 'book', title: 'সহীহ কিতাবুদ দোয়া', subtitle: 'মুহাম্মদ নূরুল ইসলাম', img: 'https://i.ibb.co/zTzVt8YT/IMG-20200426-112049.jpg', link1: 'https://drive.google.com/file/d/13y0_pMefkThTjGmxV0I-oankwlGw4Dzl/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=13y0_pMefkThTjGmxV0I-oankwlGw4Dzl&export=download' },
+                { type: 'book', title: 'দোয়া', subtitle: 'ড', img: 'https://i.ibb.co/zTzVt8YT/IMG-20200426-112049.jpg', link1: '#', link2: '#' }
+            ],
+            'new_book_2': [
+                { type: 'book', title: 'তবলীগ জামাতের গোমর ফাস', subtitle: 'লেখকের নাম', img: 'https://archive.org/download/20260804_20260804_0752/cover%20image_thumb.jpg', link1: 'https://dn711309.ca.archive.org/0/items/20260804_20260804_0752/%E0%A6%A4%E0%A6%AC%E0%A6%B2%E0%A7%80%E0%A6%97%20%E0%A6%9C%E0%A6%BE%E0%A6%AE%E0%A6%BE%E0%A6%A4%E0%A7%87%E0%A6%B0%20%E0%A6%97%E0%A7%8B%E0%A6%AE%E0%A6%B0%20%E0%A6%AB%E0%A6%BE%E0%A6%B8.pdf', link2: 'https://dn711309.ca.archive.org/0/items/20260804_20260804_0752/%E0%A6%A4%E0%A6%AC%E0%A6%B2%E0%A7%80%E0%A6%97%20%E0%A6%9C%E0%A6%BE%E0%A6%AE%E0%A6%BE%E0%A6%A4%E0%A7%87%E0%A6%B0%20%E0%A6%97%E0%A7%8B%E0%A6%AE%E0%A6%B0%20%E0%A6%AB%E0%A6%BE%E0%A6%B8.pdf' },
+                { type: 'book', title: 'তাবলিগী জামায়াতে', subtitle: 'লেখকের নাম', img: 'https://archive.org/download/20260804_20260804_0859/image_1785829858260.png', link1: 'https://archive.org/download/20260804_20260804_0859/%E0%A6%A4%E0%A6%BE%E0%A6%AC%E0%A6%B2%E0%A6%BF%E0%A6%97%E0%A7%80%20%E0%A6%9C%E0%A6%BE%E0%A6%AE%E0%A6%BE%E0%A7%9F%E0%A6%BE%E0%A6%A4%E0%A7%87%20%E0%A6%85%E0%A6%AC%E0%A6%A6%E0%A6%BE%E0%A6%A8%21%E0%A6%B2%E0%A7%87%E0%A6%96%E0%A6%95-%E0%A6%AE%E0%A7%81%E0%A6%AB%E0%A6%A4%E0%A7%80%E0%A7%9F%E0%A7%87%20%E0%A6%86%E0%A6%AF%E0%A6%AE%E0%A7%87%20%E0%A6%AC%E0%A6%BE%E0%A6%99%E0%A7%8D%E0%A6%97%E0%A6%BE%E0%A6%B2%20%E0%A6%B6%E0%A6%BE%E0%A7%9F%E0%A7%87%E0%A6%96%20%E0%A6%97%E0%A7%8B%E0%A6%B2%E0%A6%BE%E0%A6%AE%20%E0%A6%B8%E0%A6%BE%E0%A6%AE%E0%A6%A6%E0%A6%BE%E0%A6%A8%E0%A7%80%20%E0%A6%B0%E0%A7%87%E0%A6%9C%E0%A6%AD%E0%A7%80.pdf', link2: 'https://archive.org/download/20260804_20260804_0859/%E0%A6%A4%E0%A6%BE%E0%A6%AC%E0%A6%B2%E0%A6%BF%E0%A6%97%E0%A7%80%20%E0%A6%9C%E0%A6%BE%E0%A6%AE%E0%A6%BE%E0%A7%9F%E0%A6%BE%E0%A6%A4%E0%A7%87%20%E0%A6%85%E0%A6%AC%E0%A6%A6%E0%A6%BE%E0%A6%A8%21%E0%A6%B2%E0%A7%87%E0%A6%96%E0%A6%95-%E0%A6%AE%E0%A7%81%E0%A6%AB%E0%A6%A4%E0%A7%80%E0%A7%9F%E0%A7%87%20%E0%A6%86%E0%A6%AF%E0%A6%AE%E0%A7%87%20%E0%A6%AC%E0%A6%BE%E0%A6%99%E0%A7%8D%E0%A6%97%E0%A6%BE%E0%A6%B2%20%E0%A6%B6%E0%A6%BE%E0%A7%9F%E0%A7%87%E0%A6%96%20%E0%A6%97%E0%A7%8B%E0%A6%B2%E0%A6%BE%E0%A6%AE%20%E0%A6%B8%E0%A6%BE%E0%A6%AE%E0%A6%A6%E0%A6%BE%E0%A6%A8%E0%A7%80%20%E0%A6%B0%E0%A7%87%E0%A6%9C%E0%A6%AD%E0%A7%80.pdf' }
+            ],
+            
+            // --- আলেমগণের বইয়ের লিস্ট ---
+            'ibn_taymiyyah': [ 
+                { type: 'book', title: 'সৎকাজের আদেশ ও অসৎকাজ হতে নিষেধ', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/rlobs9.png', link1: 'https://drive.google.com/file/d/18hm_j-C-S9LHC_nyXc2XM2ut-bEL3PXO/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=18hm_j-C-S9LHC_nyXc2XM2ut-bEL3PXO&export=download' },
+                { type: 'book', title: 'ইবাদাতের মর্মকথা', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/we6kh8.png', link1: 'https://drive.google.com/file/d/1hLazgNqi4gwAFoWWgGLKSTPBQfLJpNmb/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1hLazgNqi4gwAFoWWgGLKSTPBQfLJpNmb&export=download' },
+                { type: 'book', title: 'শরীয়াতি রাষ্ট্রব্যবস্থা', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/d4vh6z.png', link1: 'https://drive.google.com/file/d/1fgTgYB5y8AWEtIvx5Z5WhyCBJmPya1h2/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1fgTgYB5y8AWEtIvx5Z5WhyCBJmPya1h2&export=download'},
+                { type: 'book', title: 'রাফউল মালাম আনিল আইম্মাতিল', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/0ehn2l.jpg', link1: 'https://drive.google.com/file/d/1aoUcPXbEmfzDkwJHcUoIVGCHeag4HoIp/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1aoUcPXbEmfzDkwJHcUoIVGCHeag4HoIp&export=download'},
+                { type: 'book', title: 'আল্লাহকে পেতে মাধ্যম গ্রহণ', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/6nff7c.jpg', link1: 'https://drive.google.com/file/d/1l1kQz_VavCCWmPiq8PCF_8pay_oFZ3fb/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1l1kQz_VavCCWmPiq8PCF_8pay_oFZ3fb&export=download'},
+                { type: 'book', title: 'মহা উপদেশ', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/xdplax.jpg', link1: 'https://drive.google.com/file/d/1IFtX0dbJ1tIonQjoS96Gf4qsgDMJ3itD/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1IFtX0dbJ1tIonQjoS96Gf4qsgDMJ3itD&export=download'},
+                { type: 'book', title: 'যিয়ারুল কুবুর বা কবর যিয়ারাত ', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/txpkp8.png', link1: 'https://drive.google.com/file/d/1Sp2Jll0LMdKlHcKvM52Sk72iT1_2AHjk/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Sp2Jll0LMdKlHcKvM52Sk72iT1_2AHjk&export=download'},
+                { type: 'book', title: 'মুসলিম নারীর হিজাব ও সালাতের পোষাক', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/wtetby.png', link1: 'https://drive.google.com/file/d/1kvMqU4x9XbsjKkkshtq0mM6aBIK_KHQm/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1kvMqU4x9XbsjKkkshtq0mM6aBIK_KHQm&export=download'},
+                { type: 'book', title: 'মুসলিম জাতির প্রতি মহা উপদেশ', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/vqh2kw.png', link1: 'https://drive.google.com/file/d/1dTeK4mZiQQys6xKtfhUyaQpnc-vBhfdf/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1dTeK4mZiQQys6xKtfhUyaQpnc-vBhfdf&export=download'},
+                { type: 'book', title: 'কবর যিয়ারত কবরবাসীর', subtitle: 'ইমাম ইবনে তাইমিয়া', img: 'https://files.catbox.moe/56808n.png', link1: 'https://drive.google.com/file/d/1Sp2Jll0LMdKlHcKvM52Sk72iT1_2AHjk/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Sp2Jll0LMdKlHcKvM52Sk72iT1_2AHjk&export=download'},
+            ],
+            'asadullah_ghalib': [
+                { type: 'book', title: 'হিংসা ও অহংকার', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/tuudja.png', link1: 'https://drive.google.com/file/d/1kQD8n4VQNzaliaYlwp_3ty0WhiCBF_pG/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1kQD8n4VQNzaliaYlwp_3ty0WhiCBF_pG&export=download' },
+                { type: 'book', title: 'হজ্জ ও উমরাহ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/z9tkpy.png', link1: 'https://drive.google.com/file/d/1u8mNx-K9lRgk6h4q-OE1LLjiDGabFRLM/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1u8mNx-K9lRgk6h4q-OE1LLjiDGabFRLM&export=download' },
+                { type: 'book', title: 'সীরাতুল রাসুল সাঃ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/l8fvs5.png', link1: 'https://drive.google.com/file/d/14oZHRD7CbO83vyS26kSlSk3vFbE827ig/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=14oZHRD7CbO83vyS26kSlSk3vFbE827ig&export=download' },
+                { type: 'book', title: 'সালাতুর রাসুল সাঃ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/jesf70.png', link1: 'https://drive.google.com/file/d/1dbOVMgmBPL26_dd4B1g2x6y7fRd9Iy9N/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1dbOVMgmBPL26_dd4B1g2x6y7fRd9Iy9N&export=download' },
+                { type: 'book', title: 'সমাজ বিপ্লবের ধারা', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/jesf70.png', link1: 'https://drive.google.com/file/d/1dbOVMgmBPL26_dd4B1g2x6y7fRd9Iy9N/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1dbOVMgmBPL26_dd4B1g2x6y7fRd9Iy9N&export=download' },
+                { type: 'book', title: 'শবেবরাত ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/jpkirb.png', link1: 'https://drive.google.com/file/d/11mFatmYE-xucHYINYrJ-EgqCThfnVawV/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=11mFatmYE-xucHYINYrJ-EgqCThfnVawV&export=download' },
+                { type: 'book', title: 'মীলাদ প্রসংগ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/qagzs4.png', link1: 'https://drive.google.com/file/d/1yJzi-HODwpW_rqN1jGvJRq-C4Pa2qsoa/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1yJzi-HODwpW_rqN1jGvJRq-C4Pa2qsoa&export=download' },
+                { type: 'book', title: 'মাসায়েলে কুরবানি ও আকীকা', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/hakafd.png', link1: 'https://drive.google.com/file/d/1CtcUw5yM3lmrCUEiOs-2Sy1J6dwYSqkL/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1CtcUw5yM3lmrCUEiOs-2Sy1J6dwYSqkL&export=download' },
+                { type: 'book', title: 'নবীদের কাহিনী ১ম খন্ড', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/8xj79e.jpg', link1: 'https://drive.google.com/file/d/18C0OZ-C_9KoFjok_7uPyQnUujzmmOEyu/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=18C0OZ-C_9KoFjok_7uPyQnUujzmmOEyu&export=download' },
+                { type: 'book', title: 'নবীদের কাহিনী ২য় খন্ড', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/cidwxh.jpg', link1: 'https://drive.google.com/file/d/18C0OZ-C_9KoFjok_7uPyQnUujzmmOEyu/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=18C0OZ-C_9KoFjok_7uPyQnUujzmmOEyu&export=download' },
+                { type: 'book', title: 'ধর্ম নিরপক্ষ মতবাদ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/4aqmu0.jpg', link1: 'https://drive.google.com/file/d/1wVvJM6VtFLZ81Run3-qkwPwKTmX8ngBc/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1wVvJM6VtFLZ81Run3-qkwPwKTmX8ngBc&export=download' },
+                { type: 'book', title: 'দাওয়াত ও জিহাদ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/necp9v.jpg', link1: 'https://drive.google.com/file/d/1LiQUFxIXz2VBzdj1phE7dY94BCfc1CFA/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1LiQUFxIXz2VBzdj1phE7dY94BCfc1CFA&export=download' },
+                { type: 'book', title: 'তিনটি মতবাদ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/g7ag5b.jpg', link1: 'https://drive.google.com/file/d/1GOth22Wk7dsBrmFNPVe1mlKprFfOt9Af/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1GOth22Wk7dsBrmFNPVe1mlKprFfOt9Af&export=download' },
+                { type: 'book', title: 'তালাক ও তাহলীল', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/wqytp1.jpg', link1: 'https://drive.google.com/file/d/11IGsBMgTiPC-6I1RzC49JYwxH4iSI1mX/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=11IGsBMgTiPC-6I1RzC49JYwxH4iSI1mX&export=download' },
+                { type: 'book', title: 'জীবন দর্শন', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/thynkg.jpg', link1: 'https://drive.google.com/file/d/1DGdrCLhopxqfIPwq4sc_m5QAeYEBIn7l/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1DGdrCLhopxqfIPwq4sc_m5QAeYEBIn7l&export=download' },
+                { type: 'book', title: 'জিহাদ ও কিতাল', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/cgkw0l.jpg', link1: 'https://drive.google.com/file/d/1MU3LDGbKuUaNy1LEAyyZ6YIOkSGjXM8y/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1MU3LDGbKuUaNy1LEAyyZ6YIOkSGjXM8y&export=download' },
+                { type: 'book', title: 'ছবি ও মূর্তি', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/wskopf.jpg', link1: 'https://drive.google.com/file/d/1lkvzt6oX15VlGnjzfuJj3hVECTX4f4E3/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1lkvzt6oX15VlGnjzfuJj3hVECTX4f4E3&export=download' },
+                { type: 'book', title: 'উদাত্ত আহবান', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/dh8p48.jpg', link1: 'https://drive.google.com/file/d/1MaasuwaLdDJNkOQ1FkCrruTTxoK2QOnT/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1MaasuwaLdDJNkOQ1FkCrruTTxoK2QOnT&export=download' },
+                { type: 'book', title: 'ইসলামী খিলাফত ও নেতৃত্ব নির্বাচন', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/airno1.jpg', link1: 'https://drive.google.com/file/d/1G0sLxjVgyVEOomjGcU9va6SxZHU9etVZ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1G0sLxjVgyVEOomjGcU9va6SxZHU9etVZ&export=download' },
+                { type: 'book', title: 'ইনসানে কামেল', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/v9bvmp.jpg', link1: 'https://drive.google.com/file/d/1YaVLYD-nVeQRmU-ZAmk2apJx6DekxYyA/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1YaVLYD-nVeQRmU-ZAmk2apJx6DekxYyA&export=download' },
+                { type: 'book', title: 'আক্বীদা ইসলামিয়াহ', subtitle: 'ড. আসাদুল্লাহ আল-গালিব', img: 'https://files.catbox.moe/dh39sv.jpg', link1: 'https://drive.google.com/file/d/157_-PW8kSpiQpjroaBbW4T4QHWTHf7wh/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=157_-PW8kSpiQpjroaBbW4T4QHWTHf7wh&export=download' },
+            ],
+            'albani': [
+                { type: 'book', title: 'সালাত সম্পাদনের পদ্ধতি ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/pdsa9b.jpg', link1: 'https://drive.google.com/file/d/1wX8F5JuksgD0Heqg5yZSO4xSklHZxq-x/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1wX8F5JuksgD0Heqg5yZSO4xSklHZxq-x&export=download' },
+                { type: 'book', title: 'সলাতুত তারাবীহ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/xpe2fy.jpg', link1: 'https://drive.google.com/file/d/1c7AK8Mr1usWn173wCI12AtakuPQzDvQm/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1c7AK8Mr1usWn173wCI12AtakuPQzDvQm&export=download' },
+                { type: 'book', title: 'মৃত্যু রোগ থেকে শুরু করে মৃত ব্যাক্তি কেন্দ্রিক মৃত্যের যাবতীয় করনীয় ও বর্জ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/ur67el.jpg', link1: 'https://drive.google.com/file/d/1Az71a4Z7PulGzD7F6S-GDAMjC_G4ZZrR/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Az71a4Z7PulGzD7F6S-GDAMjC_G4ZZrR&export=download' },
+                { type: 'book', title: 'বাসর রাতের আদর্শ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/946b97.jpg', link1: 'https://drive.google.com/file/d/1YgljTTQm9goEhTD23G10T3V7fFwncSza/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1YgljTTQm9goEhTD23G10T3V7fFwncSza&export=download' },
+                { type: 'book', title: 'নয়টি প্রশ্নের উত্তর ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/nqa8kr.jpg', link1: 'https://drive.google.com/file/d/1Q9HwEixdm2u1QbIUCCxHTucgkCfzbeCn/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Q9HwEixdm2u1QbIUCCxHTucgkCfzbeCn&export=download' },
+                { type: 'book', title: 'নবী সাঃ যেভাবে হজ্জ করেছেন', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/nxyzme.jpg', link1: 'https://drive.google.com/file/d/1cTxR80UKZoJ1lApO2J769xeVcRwMYz-u/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1cTxR80UKZoJ1lApO2J769xeVcRwMYz-u&export=download' },
+                { type: 'book', title: 'দাজ্জাল ! মাসীহ দাজ্জালের কিসসা', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/5il7tf.jpg', link1: 'https://drive.google.com/file/d/1VqisAZVDC6nYdjnWeCFF9Vqc_hcglKzd/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1VqisAZVDC6nYdjnWeCFF9Vqc_hcglKzd&export=download' },
+                { type: 'book', title: 'তারাবীহ ও ইতিকাফ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/8powme.jpg', link1: 'https://drive.google.com/file/d/1LUui1srvkqowxNxZs4PlDzbk6a_ioxSR/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1LUui1srvkqowxNxZs4PlDzbk6a_ioxSR&export=download' },
+                { type: 'book', title: 'ঈদের সালাত ঈদগাহে পড়তে হবে কেন', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/89pt0x.jpg', link1: 'https://drive.google.com/file/d/1RAKAOBqHVVnFhVSWJRz4bvfOn21fUIn4/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1RAKAOBqHVVnFhVSWJRz4bvfOn21fUIn4&export=download' },
+                { type: 'book', title: 'ইসলামে হাদীসের গুরুত্ব ও মর্যাদা ', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/jf9pmi.jpg', link1: 'https://drive.google.com/file/d/1NT2foy8R0nS3OFI3h-5nkQtQjEL9d81l/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1NT2foy8R0nS3OFI3h-5nkQtQjEL9d81l&export=download' },
+                { type: 'book', title: 'যঈফ ও মওজু হাদীসের সংকলন', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/85izh3.jpg', link1: 'https://drive.google.com/file/d/1_Eh1kxLROhwJtlbt2LpVuTwhc63rsuOp/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1_Eh1kxLROhwJtlbt2LpVuTwhc63rsuOp&export=download' },
+                { type: 'book', title: 'ইসলাম বিরোধী আইন জারীর বিধান ও ফিতনাতুত তাকফীর', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/hox92m.jpg', link1: 'https://drive.google.com/file/d/1SAhpAsk4EuEDNBFjsnRb_IW_kzuNP3eo/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1SAhpAsk4EuEDNBFjsnRb_IW_kzuNP3eo&export=download' },
+                { type: 'book', title: 'ইসলাম প্রচারক ভাই প্রথমে তাওহীদের দাওয়াত দিন', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/5wq081.jpg', link1: 'https://drive.google.com/file/d/1JcBSKd8Vl2-BVEPY5KLy_uTm2VpJI1an/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1JcBSKd8Vl2-BVEPY5KLy_uTm2VpJI1an&export=download' },
+                { type: 'book', title: 'আপনার হজ্ব শুদ্ধ হচ্ছে কি', subtitle: 'নাসির উদ্দিন আলবানী', img: 'https://files.catbox.moe/bs04xv.jpg', link1: 'https://drive.google.com/file/d/1bvlbDpFqWUWTyj4RTRBMH78iLdzffEyD/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1bvlbDpFqWUWTyj4RTRBMH78iLdzffEyD&export=download' },
+                
+            ],
+            'khandaker_jahangir': [
+                { type: 'book', title: 'হাদীসের নামে জালিয়াতী', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/jyc9dn.jpg', link1: 'https://drive.google.com/file/d/1CMhCjgTDTpM0qzYWyxiyPna39OnX8TgT/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1CMhCjgTDTpM0qzYWyxiyPna39OnX8TgT&export=download' },
+                { type: 'book', title: 'সোহিহ মাসনুন ওয়াজিফা', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/a4s5ch.jpg', link1: 'https://drive.google.com/file/d/1M0XdXOe6E5QErobLy9Y6X9tcMFcFObs9/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1M0XdXOe6E5QErobLy9Y6X9tcMFcFObs9&export=download' },
+                { type: 'book', title: 'রাহে বেলায়েত', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/p2nlb9.jpg', link1: 'https://drive.google.com/file/d/1L8HE3amKzy1jNCfalYEOrQ6i2HiqICM1/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1L8HE3amKzy1jNCfalYEOrQ6i2HiqICM1&export=download' },
+                { type: 'book', title: 'রমজান ও তারাবিহ', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'এখানে_লিস্টের_ইমেজ.jpg', link1: '#', link2: '#' },
+                { type: 'book', title: 'পোশাক, পর্দা ও দেহসজ্জা', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/svce92.jpg', link1: 'https://drive.google.com/file/d/1A-ZRiufIqt05O9mdx19d9gKvh9uI4Df_/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1A-ZRiufIqt05O9mdx19d9gKvh9uI4Df_&export=download' },
+                { type: 'book', title: 'খুতবাতুল ইসলাম', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/1xx0qx.jpg', link1: 'https://drive.google.com/file/d/1Ms_EGqnynomwWyVS1I-drHZdRPVWY--4/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Ms_EGqnynomwWyVS1I-drHZdRPVWY--4&export=download' },
+                { type: 'book', title: 'কুরবানি ও জাবিহুল্লাহ', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/dreyfg.jpg', link1: 'https://drive.google.com/file/d/1cxxQ6K8D1OEZMzX8lT_TcGP2c4FssHOt/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1cxxQ6K8D1OEZMzX8lT_TcGP2c4FssHOt&export=download' },
+                { type: 'book', title: 'কুরআন-সুন্নাহর আলোকে ইসলামী আকীদা', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/wqc8fm.jpg', link1: 'https://drive.google.com/file/d/13XAK1fpgo6mX8Gtjof_Q5XQhRrC7D0q5/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=13XAK1fpgo6mX8Gtjof_Q5XQhRrC7D0q5&export=download' },
+                { type: 'book', title: 'কিতাবুল মুকাদ্দাস ইঞ্জিল', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/3sv3o9.jpg', link1: 'https://drive.google.com/file/d/1Yp0lSU9uykTkFyr5jPytBYwXL6Oyk9Hk/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Yp0lSU9uykTkFyr5jPytBYwXL6Oyk9Hk&export=download' },
+                { type: 'book', title: 'এহইয়াউস সুনান', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/nte0y3.jpg', link1: 'https://drive.google.com/file/d/1tdGI3AQA-OQGH6r_9aVFKPKOrSDSVBRy/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1tdGI3AQA-OQGH6r_9aVFKPKOrSDSVBRy&export=download' },
+                { type: 'book', title: 'আল্লাহর পোথে দাওয়াত', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/vjjyu2.jpg', link1: 'https://drive.google.com/file/d/1iYmIqWXnGl_REXKZwBmoEECwp9rZssG5/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1iYmIqWXnGl_REXKZwBmoEECwp9rZssG5&export=download' },
+                { type: 'book', title: 'আল ফিকহ উল আকবার', subtitle: 'ড. খন্দকার জাহাঙ্গীর', img: 'https://files.catbox.moe/ofbz6v.jpg', link1: 'https://drive.google.com/file/d/1_SjL7ektweOxFHQnWHgwKmni1bi_rUgA/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1_SjL7ektweOxFHQnWHgwKmni1bi_rUgA&export=download' },
+
+            ],
+            'dr_zakir': [
+                { type: 'book', title: 'কুরআন ও আধুনিক বিজ্ঞান কি সামঞ্জস্যপূর্ণ নাকি অসামঞ্জস্যপূর্ণ', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/9brdqx.webp', link1: 'https://drive.google.com/file/d/1VvWxFs3SRJ7nDZGYpaknCOEuT2FNNjDO/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1VvWxFs3SRJ7nDZGYpaknCOEuT2FNNjDO&export=download' },
+                { type: 'book', title: 'আল্লাহর দিকে আহ্বান জানানো ধ্বংসের বিপরীত।', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/n9j4ns.webp', link1: 'https://drive.google.com/file/d/1cMNaZNaZKKUcqg9GWL1LvIfLM_UjhQOa/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1cMNaZNaZKKUcqg9GWL1LvIfLM_UjhQOa&export=download' },
+                { type: 'book', title: 'প্রধান ধর্মগুলোতে ঈশ্বরের ধারণা', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/8sghoh.webp', link1: 'https://drive.google.com/file/d/1WalnNbCMJgfbE9ClJbuWt7HSzs6X_iEN/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1WalnNbCMJgfbE9ClJbuWt7HSzs6X_iEN&export=download' },
+                { type: 'book', title: 'ইসলাম কি মানবতার সমাধান', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/yj46op.png', link1: 'https://drive.google.com/file/d/1Zp7NhohjdpLDlA8E7KKgca9NMOxXz3Cp/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Zp7NhohjdpLDlA8E7KKgca9NMOxXz3Cp&export=download' },
+                { type: 'book', title: 'ইসলাম ও ধর্মনিরপেক্ষতা', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/wyos1t.png', link1: 'https://drive.google.com/file/d/18Do8yuWzRwZ3sKn1DJxfrNqD5PuexxNz/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=18Do8yuWzRwZ3sKn1DJxfrNqD5PuexxNz&export=download' },
+                { type: 'book', title: 'জিহাদ ও সন্ত্রাসবাদ পর্ব ১', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/2972bi.png', link1: 'https://drive.google.com/file/d/1uLIAi9G8lA68e75IBAZNJOM59w4Say8Z/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1uLIAi9G8lA68e75IBAZNJOM59w4Say8Z&export=download' },
+                { type: 'book', title: 'জিহাদ ও সন্ত্রাসবাদ দ্বিতীয় পর্ব', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/2972bi.png', link1: 'https://drive.google.com/file/d/1rcBw_20OlCERQW2IpGgCZMqCeXhHRrnt/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1rcBw_20OlCERQW2IpGgCZMqCeXhHRrnt&export=download' },
+                { type: 'book', title: 'চাঁদ ও কুরআন', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/yffyep.png', link1: 'https://drive.google.com/file/d/1kRSpDwJAaRynyp56mO2pxFf8tLTqhlvh/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1kRSpDwJAaRynyp56mO2pxFf8tLTqhlvh&export=download' },
+                { type: 'book', title: 'কুরআন ও আধুনিক বিজ্ঞান', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/1vk0yn.webp', link1: 'https://drive.google.com/file/d/1KmfrStfbY2yibP7gip_UlkkwcpDfe2J0/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1KmfrStfbY2yibP7gip_UlkkwcpDfe2J0&export=download' },
+                { type: 'book', title: 'ইসলাম ও হিন্দুধর্মের মধ্যে সাদৃশ্য ও মিল', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/xghzsi.webp', link1: 'https://drive.google.com/file/d/1XBgaxPoy1vZI0pkJppis3ZvOqr49S8MH/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1XBgaxPoy1vZI0pkJppis3ZvOqr49S8MH&export=download' },
+                { type: 'book', title: 'আমাদের জীবনের উদ্দেশ্য কী', subtitle: 'ড. জাকির নায়েক', img: 'https://files.catbox.moe/izjstk.webp', link1: 'https://drive.google.com/file/d/1E5UJYkOuhvMwxnUPCUdIrweVN4rlrn_I/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1E5UJYkOuhvMwxnUPCUdIrweVN4rlrn_I&export=download' },
+                
+            ],
+            'abdur_razzak': [
+                
+                { type: 'book', title: 'আইনে রাসুল সাঃ দোআ অধ্যায়', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/8yer9s.png', link1: 'https://drive.google.com/file/d/1aDPANsMesX4FhiAfFuiNZeSYZJENDkdC/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1aDPANsMesX4FhiAfFuiNZeSYZJENDkdC&export=download' },
+                { type: 'book', title: 'আদর্শ নারী_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/td2p4j.png', link1: 'https://drive.google.com/file/d/1SWDMMuvSXl162vUBbBrQYs45OPdHt1va/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1SWDMMuvSXl162vUBbBrQYs45OPdHt1va&export=download' },
+                { type: 'book', title: 'আদর্শ পরিবার_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/f7o7a0.png', link1: 'https://drive.google.com/file/d/1E3-uidwzRm_IyaAW136TH7zQ_7MMByBi/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1E3-uidwzRm_IyaAW136TH7zQ_7MMByBi&export=download' },
+                { type: 'book', title: 'আদর্শ পুরুষ_ ', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/r1dpzr.png', link1: 'https://drive.google.com/file/d/1iFYf49F2Ne8t1rIKGBAFbNOzqrqgqse1/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1iFYf49F2Ne8t1rIKGBAFbNOzqrqgqse1&export=download' },
+                { type: 'book', title: 'উপদেশ_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/d3yztw.png', link1: 'https://drive.google.com/file/d/18uD_qzpUu8Hw0YrtNbDw0ovW8p_Tgy6g/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=18uD_qzpUu8Hw0YrtNbDw0ovW8p_Tgy6g&export=download' },
+                { type: 'book', title: 'কে বড় ক্ষতিগ্রস্ত_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/pyi3yu.png', link1: 'https://drive.google.com/file/d/127tVW5jMcJ1rhkA-yg5-5OuzE_lN6rK1/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=127tVW5jMcJ1rhkA-yg5-5OuzE_lN6rK1&export=download' },
+                { type: 'book', title: 'কে বড় লাভবান_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/zreczn.png', link1: 'https://drive.google.com/file/d/1qIt6Su9yHpncVFLaz5ao-PGuWE-bhubl/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1qIt6Su9yHpncVFLaz5ao-PGuWE-bhubl&export=download' },
+                { type: 'book', title: 'তাওযীহুল কুরআন_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/rsubz3.png', link1: 'https://drive.google.com/file/d/1ar2l03lzq08lDk8WF3yvTzmauOm1u54k/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1ar2l03lzq08lDk8WF3yvTzmauOm1u54k&export=download' },
+                { type: 'book', title: 'তাফসীর কি মিথ্যা হতে পারে_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/rn8tbo.png', link1: 'https://drive.google.com/file/d/1zzPY1rEFZEdkXFe41dIW1GzVPrhh9aR2/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1zzPY1rEFZEdkXFe41dIW1GzVPrhh9aR2&export=download' },
+                { type: 'book', title: 'বক্তা ও শ্রোতার পরিচয়_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/1noaen.png', link1: 'https://drive.google.com/file/d/10BNat-qjZbrPPyEeNnDXGZw6qVMc-dPf/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=10BNat-qjZbrPPyEeNnDXGZw6qVMc-dPf&export=download' },
+                { type: 'book', title: 'মরণ একদিন আসবেই_', subtitle: 'আব্দুর রাজ্জাক বিন ইউসুফ', img: 'https://files.catbox.moe/i84yfe.png', link1: 'https://drive.google.com/file/d/1i0JIcKtP7t7D_e9ucedp95UuiePJzVcJ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1i0JIcKtP7t7D_e9ucedp95UuiePJzVcJ&export=download' },
+                
+            ],
+            'muzaffar_mohsin': [
+                { type: 'book', title: 'আহলে হাদীসদের সংগ্রামী চেতনা', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/601y8i.jpg', link1: 'https://drive.google.com/file/d/1VaJ968yT1yYpIEQ69wB8IYP4V5M4Dh1_/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1VaJ968yT1yYpIEQ69wB8IYP4V5M4Dh1_&export=download' },
+                { type: 'book', title: 'ঈদের তাকদীর', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/0na4lx.jpg', link1: 'https://drive.google.com/file/d/1zdDuOKzr2YaTYR3uZk4o6pMOGdmTHYN8/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1zdDuOKzr2YaTYR3uZk4o6pMOGdmTHYN8&export=download' },
+                { type: 'book', title: 'সহীহ হাদীসের কষ্টিপাথরে ঈদের তাকবীর', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/0na4lx.jpg', link1: 'https://drive.google.com/file/d/1f1m2Te4O_zcTyDtR7-0p5vZe52o5I3My/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1f1m2Te4O_zcTyDtR7-0p5vZe52o5I3My&export=download' },
+                { type: 'book', title: 'গভীর ষড়যন্ত্রের কবলে আহলেহাদীছ আন্দোলন', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/4ss3hv.jpg', link1: 'https://drive.google.com/file/d/1jN__WwxOOBDbT5bknBDjlNxzJeRpVFhh/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1jN__WwxOOBDbT5bknBDjlNxzJeRpVFhh&export=download' },
+                { type: 'book', title: 'জাল ও যইফ হাদিস বর্জনের মূলনীতি', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/y4w4po.jpg', link1: 'https://drive.google.com/file/d/1OfEHYMySuzPVLQOevTyJhzL_Dyqq2QHn/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1OfEHYMySuzPVLQOevTyJhzL_Dyqq2QHn&export=download' },
+                { type: 'book', title: 'জাল হাদীছের কবলে রাসূলুল্লাহ (ছাঃ)-এর ছালাত', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/2uo28m.jpg', link1: 'https://drive.google.com/file/d/1KGmFWbISpWZabighSrUgzuHO44Ce36I0/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1KGmFWbISpWZabighSrUgzuHO44Ce36I0&export=download' },
+                { type: 'book', title: 'তারাবীহর রাকাত সংখ্যাঃ একটি তাত্ত্বিক বিশ্লেষণ', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/k0lwtf.jpg', link1: 'https://drive.google.com/file/d/1jg4aP-8u1AvEQ0UTs3BNWh7Gff-iwgOz/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1jg4aP-8u1AvEQ0UTs3BNWh7Gff-iwgOz&export=download' },
+                { type: 'book', title: 'নির্বাচিত হাদীছ', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/kdwbnd.jpg', link1: 'https://drive.google.com/file/d/164UhbKPpH01cyvSYFPLzzxQd-x3v_141/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=164UhbKPpH01cyvSYFPLzzxQd-x3v_141&export=download' },
+                { type: 'book', title: 'ভ্রান্তির বেড়াজালে ইক্বামাতে দ্বীন', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/nznr8h.jpg', link1: 'https://drive.google.com/file/d/1UWan0Ru6P8nBJAXcQP_MlB2Zk-uWmvfD/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1UWan0Ru6P8nBJAXcQP_MlB2Zk-uWmvfD&export=download' },
+                { type: 'book', title: 'মিশকাতে বর্ণিত যঈফ ও জাল হাদীছ ', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/fuuobn.jpg', link1: 'https://drive.google.com/file/d/10ck8f8vEdrP_bwEimt6KHr52SA3lXC3B/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=10ck8f8vEdrP_bwEimt6KHr52SA3lXC3B&export=download' },
+                { type: 'book', title: 'মিশকাতে বর্ণিত যঈফ ও জাল হাদীছ ২য় খণ্ড_.', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/2gjm7t.jpg', link1: 'https://drive.google.com/file/d/1uFmH7mRik7KOKBcO1Zzk96__YKBT7eyQ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1uFmH7mRik7KOKBcO1Zzk96__YKBT7eyQ&export=download' },
+                { type: 'book', title: 'যঈফ ও জাল হাদীস বর্জনের মূলনীতি', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/y4w4po.jpg', link1: 'https://drive.google.com/file/d/1qdeveJmezEeQQbarwkjNAXeJed-beplt/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1qdeveJmezEeQQbarwkjNAXeJed-beplt&export=download' },
+                { type: 'book', title: 'শরীয়াহ মানদণ্ডে মুনাজাত', subtitle: 'ড. মুজাফফর বিন মহসিন', img: 'https://files.catbox.moe/ilk0o6.jpg', link1: 'https://drive.google.com/file/d/1jbVdj_2taxeLnodK5fbh3aEvsctBpUk9/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1jbVdj_2taxeLnodK5fbh3aEvsctBpUk9&export=download' },
+                
+            ],
+            'rahul_hossain': [
+                { type: 'book', title: 'সালাতে হাত বাঁধার স্থান বিভ্রান্তি নিরসন', subtitle: 'ব্রাদার রাহুল হোসেন', img: 'https://files.catbox.moe/ksj8i0.jpg', link1: 'https://drive.google.com/file/d/17dKTlskq_W5oK2x1_fTRZpM4Y1Ks3lcB/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=17dKTlskq_W5oK2x1_fTRZpM4Y1Ks3lcB&export=download' },
+                { type: 'book', title: 'খ্রিষ্টানদের জন্য বড়দিনের উপহার', subtitle: 'ব্রাদার রাহুল হোসেন', img: 'https://files.catbox.moe/xde5pw.jpg', link1: 'https://drive.google.com/file/d/1FdnYabI8C0DkBHw38jqDewZmfGaVfgT8/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1FdnYabI8C0DkBHw38jqDewZmfGaVfgT8&export=download' },
+                
+            ],
+            'nouman_ali_khan': [
+                { type: 'book', title: 'নবীদের দুআ', subtitle: 'নোমান আলী খান', img: 'https://files.catbox.moe/mo8kih.jpg', link1: 'https://drive.google.com/file/d/1IcNfrxNT9grR6XEtarhZnEZTn-cn6LjJ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1IcNfrxNT9grR6XEtarhZnEZTn-cn6LjJ&export=download' },
+                { type: 'book', title: 'প্রশান্তির খোঁজে', subtitle: 'নোমান আলী খান', img: 'https://files.catbox.moe/00jrrj.jpg', link1: 'https://drive.google.com/file/d/1D29axVkcG0i2_nfO2nRmjGFKTTwcKIQp/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1D29axVkcG0i2_nfO2nRmjGFKTTwcKIQp&export=download' },
+                { type: 'book', title: 'প্রশান্তির বাণী', subtitle: 'নোমান আলী খান', img: 'https://files.catbox.moe/r6jvry.jpg', link1: 'https://drive.google.com/file/d/1KI3c_sdC3ru1onelEBCDJBsjbVrgOWjH/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1KI3c_sdC3ru1onelEBCDJBsjbVrgOWjH&export=download' },
+                { type: 'book', title: 'বন্ধন পারিবারিক জীবনে আমাদের দায়িত্ব ও কর্তব্য', subtitle: 'নোমান আলী খান', img: 'https://files.catbox.moe/5idx97.jpg', link1: 'https://drive.google.com/file/d/1zTfBuxRDj69lx3EzNXytC3jGthyX34It/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1zTfBuxRDj69lx3EzNXytC3jGthyX34It&export=download' },
+            
+            ],
+            'mizanur_rahman_azhari': [
+                { type: 'book', title: 'জেগে ওঠো আবার', subtitle: 'মিজানুর রহমান আজহারী', img: 'https://files.catbox.moe/7hql90.jpg', link1: 'https://drive.google.com/file/d/1QlFIa5rRrSH6G9JMgMseO1oco1yJF_af/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1QlFIa5rRrSH6G9JMgMseO1oco1yJF_af&export=download' },
+                { type: 'book', title: 'রিফ্লেকশন ফ্রম সূরা ইউসুফ', subtitle: 'মিজানুর রহমান আজহারী', img: 'https://files.catbox.moe/8nz61e.jpg', link1: 'https://drive.google.com/file/d/18dLtVPb2zVKdbC-7AHsC9Xw2o5Zhj-Yg/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=18dLtVPb2zVKdbC-7AHsC9Xw2o5Zhj-Yg&export=download' },
+                { type: 'book', title: 'আহ্বান আধুনিক মননে আলোর পরশ', subtitle: 'মিজানুর রহমান আজহারী', img: 'https://files.catbox.moe/kw262z.jpg', link1: 'https://drive.google.com/file/d/1H9h_RuzJYAu_7A1Ina_AVFoyVfJSmPMK/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1H9h_RuzJYAu_7A1Ina_AVFoyVfJSmPMK&export=download' }
+            
+             ],
+             'Imam_Bayhaqi': [
+            
+             { type: 'book', title: 'ইমানের শাখা', subtitle: 'ইমাম বাইহাকী', img: 'https://files.catbox.moe/yub2c3.jpg', link1: 'https://drive.google.com/file/d/15cn-xJXOgpdS6rdsiJCnJo0KpaRQ5Y6L/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=15cn-xJXOgpdS6rdsiJCnJo0KpaRQ5Y6L&export=download' },
+             { type: 'book', title: 'ভাগ্য ও তাকদীর', subtitle: 'ইমাম বাইহাকী', img: 'https://files.catbox.moe/9z5tig.jpg', link1: 'https://drive.google.com/file/d/1bQsTBCb7Y6S7rrLkznI7ADcGfmto28xg/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1bQsTBCb7Y6S7rrLkznI7ADcGfmto28xg&export=download' },
+             { type: 'book', title: 'তাদবীর ও তাওয়াক্কুল', subtitle: 'ইমাম বাইহাকী', img: 'https://files.catbox.moe/eenc2s.jpg', link1: 'https://drive.google.com/file/d/1KHV7mpNQryrbo82hqjQlJvGPc0u51fBs/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1KHV7mpNQryrbo82hqjQlJvGPc0u51fBs&export=download' },
+             { type: 'book', title: 'শুয়াবুল ইমান- ইমাম বাইহাকী', subtitle: 'ইমাম বাইহাকী', img: 'https://files.catbox.moe/h7j9xi.jpg', link1: 'https://drive.google.com/file/d/1ZRETRTl43MmMTi4WUy4N8H5in-3w-tMU/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1ZRETRTl43MmMTi4WUy4N8H5in-3w-tMU&export=download' },
+            
+             ],
+
+            // ================= তাফসীর গ্রন্থ =================
+            'ibn_kathir': [
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১-২-৩- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1M1XqXNCi14vpnDt5_wf0N-CSbLnPpXou/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1M1XqXNCi14vpnDt5_wf0N-CSbLnPpXou&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ৪-৫-৬-৭- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1GYqY1GkY1IxgXXemHXKcUWFrtfBCSCRf/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1GYqY1GkY1IxgXXemHXKcUWFrtfBCSCRf&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ৮-৯-১০-১১- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1_kG94yal4VogviCippMM1SQ1YQIbHdaT/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1_kG94yal4VogviCippMM1SQ1YQIbHdaT&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১২- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1YA23VHpb0EaZ6AmzMX0CvjfSUVDkFWEw/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1YA23VHpb0EaZ6AmzMX0CvjfSUVDkFWEw&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১৩- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1HTYbhCwj16bKJE1IsiUHK9BmHJgLvRDr/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1HTYbhCwj16bKJE1IsiUHK9BmHJgLvRDr&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১৪- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1Z3vTAIc2-A4cQjvbATh6cx-6GYppJYqG/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Z3vTAIc2-A4cQjvbATh6cx-6GYppJYqG&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১৫- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/10dipiVkbI-Y18zuaD0hqwj43LgE3Egp9/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=10dipiVkbI-Y18zuaD0hqwj43LgE3Egp9&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১৬- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1uz5vc9oTtsJopQfJu4l0sGXrWDUvkONM/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1uz5vc9oTtsJopQfJu4l0sGXrWDUvkONM&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১৭- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/13951nQtpVyjgq_Wuob8wWPvJ9lzKL02Q/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=13951nQtpVyjgq_Wuob8wWPvJ9lzKL02Q&export=download' },
+                { type: 'book', title: 'তাফসীর ইবনে কাসীর - ১৮- খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://i.ibb.co/ch8K9fZ3/image-1785496321794.jpg', link1: 'https://drive.google.com/file/d/1wzMY8pdvaBrkNXQU1Y486uQNTmW12X9r/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1wzMY8pdvaBrkNXQU1Y486uQNTmW12X9r&export=download' },
+            ],
+            'zakaria': [
+                { type: 'book', title: ' তাফসীর জাকারিয়া - ১ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/q7bn23.png', link1: 'https://drive.google.com/file/d/1SzTpMxJYlMaWFvj3RZH7xrZEpdSXRiIe/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1SzTpMxJYlMaWFvj3RZH7xrZEpdSXRiIe&export=download' },
+                { type: 'book', title: ' তাফসীর জাকারিয়া - ২ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/bmg86l.png', link1: 'https://drive.google.com/file/d/1wYbymh5DnuzGwZOi66o7EQfsPGF_boji/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1wYbymh5DnuzGwZOi66o7EQfsPGF_boji&export=download' } ,
+            ],
+            'jalalain': [
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ১ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/1Ccyt2BqiPMGv7eNA0tJ0VL8PBiYPE661/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Ccyt2BqiPMGv7eNA0tJ0VL8PBiYPE661&export=download' },
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ২ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/1K7NzDS5AfaiAuuazy2hdkeKesPt59BWv/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1K7NzDS5AfaiAuuazy2hdkeKesPt59BWv&export=download' },
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ৩ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/11-NqRS5eNANAHUcD6IDSxS4ou3Z5R4Tg/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=11-NqRS5eNANAHUcD6IDSxS4ou3Z5R4Tg&export=download' },
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ৪ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/11W755pM5iXZ4IAZoEXR5joMVIJw0Rcve/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=11W755pM5iXZ4IAZoEXR5joMVIJw0Rcve&export=download' },
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ৫ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/1GhlXYue-YkVSaBkqunAqczwYmA6GwMbK/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1GhlXYue-YkVSaBkqunAqczwYmA6GwMbK&export=download' },
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ৬ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/1mh8c2yPEdF60UVMBycgbB5vf_Mw3nxzi/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1mh8c2yPEdF60UVMBycgbB5vf_Mw3nxzi&export=download' },
+                { type: 'book', title: ' তাফসীরুল জালালাইন - ৭ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l9hcgx.png', link1: 'https://drive.google.com/file/d/1zsvnhBG8GT7rgKLrr1B5ci_xBvo-kP8G/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1zsvnhBG8GT7rgKLrr1B5ci_xBvo-kP8G&export=download' } ,
+            ],
+            'mazhari': [
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ১ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1giOazfTSDuPhgJuKMHieB0Op2vVSDlem/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1giOazfTSDuPhgJuKMHieB0Op2vVSDlem&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ২ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1U6p8lfyGlgpfTDANFMaJmMiwYtgKa1EA/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1U6p8lfyGlgpfTDANFMaJmMiwYtgKa1EA&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৩ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1LAVAa1fZO0WLZBqh1SYFPH6GnpiUgmT5/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1LAVAa1fZO0WLZBqh1SYFPH6GnpiUgmT5&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৪ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1-8wdfNN8ejUvDQcPMDCDwVUTvArXY9Pc/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1-8wdfNN8ejUvDQcPMDCDwVUTvArXY9Pc&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৫ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1eVABUJ-l8OaFSjBfGbw4vWNDRdkk8HhY/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1eVABUJ-l8OaFSjBfGbw4vWNDRdkk8HhY&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৬ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1e9zGrnDWLWix6dPOwLPg72R2s_M9aLvx/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1e9zGrnDWLWix6dPOwLPg72R2s_M9aLvx&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৭ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1J5XAcDy4hPD0hAaNRBr6in-eOqBpTAwf/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1J5XAcDy4hPD0hAaNRBr6in-eOqBpTAwf&export=download' } ,
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৮ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1Ckzn7aW2V1baOpPMgjq256ukfHzbEZTK/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Ckzn7aW2V1baOpPMgjq256ukfHzbEZTK&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ৯ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1XXM3T_4E2mPS_afx9L38ljoqRllwmWZa/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1XXM3T_4E2mPS_afx9L38ljoqRllwmWZa&export=download' } ,
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ১০ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1YA8YkCp8hNv2LSngBE-ikuOG0i7Ypkn_/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1YA8YkCp8hNv2LSngBE-ikuOG0i7Ypkn_&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ১১ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1ExhXKylGzuzIaQKMUrme_czsynTja0II/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1ExhXKylGzuzIaQKMUrme_czsynTja0II&export=download' },
+                { type: 'book', title: ' তাফসীর-ই-মাযহারী - ১২ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/gt11s6.png', link1: 'https://drive.google.com/file/d/1aceKc41XRIivY8r7QbngJcmZbAZ1TL1Z/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1aceKc41XRIivY8r7QbngJcmZbAZ1TL1Z&export=download' },
+            ],
+            'ibn_abbas': [
+                { type: 'book', title: ' তাফসীর ইবনে আব্বাস - ১ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/mrdte5.png', link1: 'https://drive.google.com/file/d/1BaKl277rfjho-EM6bCc-FiTBo5zfJ6Ke/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1BaKl277rfjho-EM6bCc-FiTBo5zfJ6Ke&export=download' },
+                { type: 'book', title: ' তাফসীর ইবনে আব্বাস - ২ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/mrdte5.png', link1: 'https://drive.google.com/file/d/1el55GDKAzNuVXJGbhCyeLPEa2flUYi1z/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1el55GDKAzNuVXJGbhCyeLPEa2flUYi1z&export=download' },
+                { type: 'book', title: ' তাফসীর ইবনে আব্বাস - ৩ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/73ga85.png', link1: 'https://drive.google.com/file/d/1JvtHhmRR26vLVHO1OmRZLZs2J5xAb5Wz/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1JvtHhmRR26vLVHO1OmRZLZs2J5xAb5Wz&export=download' } ,
+            ],
+           'Tafsir_Tabari':[
+                { type: 'book', title: ' তাফসীর  তাবারী - ১ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/kko2f9.jpg', link1: 'https://drive.google.com/file/d/10zqnSUnEssj-Vu_7MXmAM5XvPmC025uJ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=10zqnSUnEssj-Vu_7MXmAM5XvPmC025uJ&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী- ২ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/mkhsrl.jpg', link1: 'https://drive.google.com/file/d/1eiDHmActtEPONdsRvMo0tPuKFEl6a7e_/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1eiDHmActtEPONdsRvMo0tPuKFEl6a7e_&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৩ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/53f326.jpg', link1: 'https://drive.google.com/file/d/1oF08ErUtea3PDaMGqakxTrQpKta0d8Gz/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1oF08ErUtea3PDaMGqakxTrQpKta0d8Gz&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৪ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/0pcm4c.jpg', link1: 'https://drive.google.com/file/d/1oxrWyUJNYT-cCTaIurVt-bLTOsdnxytl/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1oxrWyUJNYT-cCTaIurVt-bLTOsdnxytl&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৫ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/wc235d.jpg', link1: 'https://drive.google.com/file/d/1haMFw1i7vEPPnurkKu--oBp5COdnCv3w/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1haMFw1i7vEPPnurkKu--oBp5COdnCv3w&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৬ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/0sdasu.jpg', link1: 'https://drive.google.com/file/d/1vyWy9kYuoWlNh8UApWW4BMbbxgschztw/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1vyWy9kYuoWlNh8UApWW4BMbbxgschztw&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৭ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/xvwyun.jpg', link1: 'https://drive.google.com/file/d/140BhDNHs8Cp1gunIBspiarRGQ0I2AJ9A/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=140BhDNHs8Cp1gunIBspiarRGQ0I2AJ9A&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৮ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/2jma76.jpg', link1: 'https://drive.google.com/file/d/1Zi_N8XXlQAb8bM349c2TAPB1BhGZ8iY3/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Zi_N8XXlQAb8bM349c2TAPB1BhGZ8iY3&export=download' } ,
+                { type: 'book', title: ' তাফসীর  তাবারী - ৯ খণ্ড', subtitle: 'তাফসীর গ্রন্থ', img: 'https://files.catbox.moe/l35e3r.jpg', link1: 'https://drive.google.com/file/d/1eUYXbk-jp1d-1h5Wlez13SFYyhDZ4F6K/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1eUYXbk-jp1d-1h5Wlez13SFYyhDZ4F6K&export=download' } ,
+            
+           ],
+            // ================= হাদিস গ্রন্থ =================
+            'bukhari': [
+                
+                { type: 'book', title: ' সহীহ বুখারী - ১ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/fducpy.png', link1: 'https://drive.google.com/file/d/1US6mjna8_VnY4AUeR_jsdW3FP9z3cn9S/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1US6mjna8_VnY4AUeR_jsdW3FP9z3cn9S&export=download' },
+                { type: 'book', title: ' সহীহ বুখারী - ২ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/fducpy.png', link1: 'https://drive.google.com/file/d/1cGHP2KSSa0QY9jNhfcDaGftVQx1GRQRm/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1cGHP2KSSa0QY9jNhfcDaGftVQx1GRQRm&export=download' },
+                { type: 'book', title: ' সহীহ বুখারী - ৩ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/fducpy.png', link1: 'https://drive.google.com/file/d/1SjiPPxyB1-Dlxg4-t2L3GRNYYZ5JCnpt/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1SjiPPxyB1-Dlxg4-t2L3GRNYYZ5JCnpt&export=download' },
+                { type: 'book', title: ' সহীহ বুখারী - ৪ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/fducpy.png', link1: 'https://drive.google.com/file/d/15bY3QJoTHRklaebm9usjnPbiEBS58ffe/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=15bY3QJoTHRklaebm9usjnPbiEBS58ffe&export=download' },
+                { type: 'book', title: ' সহীহ বুখারী - ৫ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/fducpy.png', link1: 'https://drive.google.com/file/d/1mFSkge-Qggm3oGflUIWPj0OOI2cwWVQq/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1mFSkge-Qggm3oGflUIWPj0OOI2cwWVQq&export=download' },
+                { type: 'book', title: ' সহীহ বুখারী - ৬ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/fducpy.png', link1: 'https://drive.google.com/file/d/1YQJADwmKo-AKEn3U7_u6apM0CgVsRNfX/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1YQJADwmKo-AKEn3U7_u6apM0CgVsRNfX&export=download' },
+            ],
+            'muslim': [
+              
+              { type: 'book', title: 'সহীহ মুসলিম - ১ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1dqpHWL8P8VGjWSNo7iudg3zKRAmP4oZp/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1dqpHWL8P8VGjWSNo7iudg3zKRAmP4oZp&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ২ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1SLCjVEPQlFJBgVMQrv7Ve-ckBGVfonxJ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1SLCjVEPQlFJBgVMQrv7Ve-ckBGVfonxJ&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৩ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1PyXiypochNoxOQDA4Q5l2Ds8IOSjF5CO/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1PyXiypochNoxOQDA4Q5l2Ds8IOSjF5CO&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৪ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1r-oKHLq00pZq4CrXugbCuxZeZa-OeClX/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1r-oKHLq00pZq4CrXugbCuxZeZa-OeClX&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৫ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1TmRlqbzf8nhvhm-oyJKzQMA-wqs_tvWB/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1TmRlqbzf8nhvhm-oyJKzQMA-wqs_tvWB&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৬ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1H2KtO-sJSBTp_4xWrft5SXWPBDxvEQNc/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1H2KtO-sJSBTp_4xWrft5SXWPBDxvEQNc&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৭ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1F_mkQPsGwSi6MBAl4nlwT9U1YMHv1_uE/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1F_mkQPsGwSi6MBAl4nlwT9U1YMHv1_uE&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম -৮ খণ্ড', subtitle: 'বাংলাদেশী ইসলামিক সেন্টার', img: 'https://files.catbox.moe/o4rp1d.png', link1: 'https://drive.google.com/file/d/1tOLq_EGArl6sG9oBH_0k11OInzRz26iZ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1tOLq_EGArl6sG9oBH_0k11OInzRz26iZ&export=download' },
+            ],
+            'mishkat': [
+                
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ১ খণ্ড', subtitle: 'হাদিস একাডেমি', img: 'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1_KZEC2aZox-Q1rLK6uifb7ceAXDRkDr0/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1_KZEC2aZox-Q1rLK6uifb7ceAXDRkDr0&export=download' },
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ২ খণ্ড', subtitle: 'হাদিস একাডেমি', img: 'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1uc7LrPnFILnyk-SxTRXuirdhRv8E6G0L/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1uc7LrPnFILnyk-SxTRXuirdhRv8E6G0L&export=download' },
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ৩ খণ্ড', subtitle: 'হাদিস একাডেমি', img: 'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1UwwS_4OsPsvWPNlyOp1ehmhVBotrtXjv/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1UwwS_4OsPsvWPNlyOp1ehmhVBotrtXjv&export=download' },
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ৪ খণ্ড', subtitle: 'হাদিস একাডেমি', img: 'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1MLK_ThT6HFGO_Hdhwcg7OKK6ygeOC8dL/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1MLK_ThT6HFGO_Hdhwcg7OKK6ygeOC8dL&export=download' },
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ৫ খণ্ড', subtitle: 'হাদিস একাডেমি', img: 'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1rWqH6NfNV4xSK-_05XsH6dBb7bCHK-Nz/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=12yDar-SfsBA7CW9dYm2nGsQR_MGD9gYy&export=download' },
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ৬ -১ খণ্ড', subtitle: 'হাদিস একাডেমি', img:'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1U6uu3pAlRvjfBMCj1JsOnL5x121vPhCI/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1U6uu3pAlRvjfBMCj1JsOnL5x121vPhCI&export=download' },
+               { type: 'book', title: 'মিশকাতুল মাসাবীহ - ৬ - ২ খণ্ড', subtitle: 'হাদিস একাডেমি', img:'https://files.catbox.moe/gpoo5x.png', link1: 'https://drive.google.com/file/d/1AD6vyPl4nMQNKwg0_6Ew4gQfQW_CjvJF/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1AD6vyPl4nMQNKwg0_6Ew4gQfQW_CjvJF&export=download' },
+                      
+            ],
+            'tirmidhi': [
+                { type: 'book', title: 'সুনান আত-তিরমিজী - ১ খণ্ড', subtitle: 'হুসাইন আল-মাদানী প্রকাশনী', img: 'https://files.catbox.moe/z2e8rh.jpg', link1: 'https://drive.google.com/file/d/1n2LrG7Zm7wl5PpKux0ytZiomnApTAlm5/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1n2LrG7Zm7wl5PpKux0ytZiomnApTAlm5&export=download ' },
+                { type: 'book', title: 'সুনান আত-তিরমিজী - ২ খণ্ড', subtitle: 'হুসাইন আল-মাদানী প্রকাশনী', img: 'https://files.catbox.moe/z2e8rh.jpg', link1: 'https://drive.google.com/file/d/1BHsoo_OOnArElanYm2Oa0KBz6u5sTKTA/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1BHsoo_OOnArElanYm2Oa0KBz6u5sTKTA&export=download' },
+                { type: 'book', title: 'সুনান আত-তিরমিজী - ৩ খণ্ড', subtitle: 'হুসাইন আল-মাদানী প্রকাশনী', img: 'https://files.catbox.moe/z2e8rh.jpg', link1: 'https://drive.google.com/file/d/15-NQpy5DU9BDG7y_NXg-BYqsEA1yQfFq/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=15-NQpy5DU9BDG7y_NXg-BYqsEA1yQfFq&export=download' },
+                { type: 'book', title: 'সুনান আত-তিরমিজী - ৪ খণ্ড', subtitle: 'হুসাইন আল-মাদানী প্রকাশনী', img: 'https://files.catbox.moe/z2e8rh.jpg', link1: 'https://drive.google.com/file/d/1Wm_7b399nH5fJlUGRHq4G0wKHGiomByw/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Wm_7b399nH5fJlUGRHq4G0wKHGiomByw&export=download' },
+                { type: 'book', title: 'সুনান আত-তিরমিজী - ৫ খণ্ড', subtitle: 'হুসাইন আল-মাদানী প্রকাশনী', img: 'https://files.catbox.moe/z2e8rh.jpg', link1: 'https://drive.google.com/file/d/16gT0QDgeupsNh1ZZ50RZ5a_dhqRNUkNV/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=16gT0QDgeupsNh1ZZ50RZ5a_dhqRNUkNV&export=download' },
+                { type: 'book', title: 'সুনান আত-তিরমিজী - ৬ খণ্ড', subtitle: 'হুসাইন আল-মাদানী প্রকাশনী', img: 'https://files.catbox.moe/z2e8rh.jpg', link1: 'https://drive.google.com/file/d/1-tt8vZdd0o0flVgGT0nomZpngdDRD6Pi/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1-tt8vZdd0o0flVgGT0nomZpngdDRD6Pi&export=download' },
+            ],
+            'abu_dawud': [
+                { type: 'book', title: 'আবু দাউদ শরীফ - ১ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/l27esp.jpg', link1: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20volume%201%20.pdf', link2: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20volume%201%20.pdf' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ২ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/l27esp.jpg', link1: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20%20volume%202%20.pdf', link2: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20%20volume%202%20.pdf' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ৩ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/l27esp.jpg', link1: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20%20volume%203.pdf', link2: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20%20volume%203.pdf' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ৪ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/l27esp.jpg', link1: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20volume%204.pdf', link2: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20volume%204.pdf' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ৫ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/l27esp.jpg', link1: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20volume%205.pdf', link2: 'https://archive.org/download/abu-dawud-volume-5/Abu%20Dawud%20volume%205.pdf' },
+            ],
+            
+            'abu_dawud_2': [
+                { type: 'book', title: 'আবু দাউদ শরীফ - ১ খণ্ড', subtitle: 'প্রকাশক : মোঃ জিল্লুর রহমান জিলানী', img: 'https://files.catbox.moe/aku2om.jpg', link1: 'https://drive.google.com/file/d/1O89_dQ2jJEBm7oJ0o4jEc75t9plubbNu/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1O89_dQ2jJEBm7oJ0o4jEc75t9plubbNu&export=download' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ২ খণ্ড', subtitle: 'প্রকাশক : মোঃ জিল্লুর রহমান জিলানী', img: 'https://files.catbox.moe/imt31e.jpg', link1: 'https://drive.google.com/file/d/1qTwq9ioDPWDC9tOmwlDja4UF477mThtu/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1qTwq9ioDPWDC9tOmwlDja4UF477mThtu&export=download' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ৩ খণ্ড', subtitle: 'প্রকাশক : মোঃ জিল্লুর রহমান জিলানী', img: 'https://files.catbox.moe/l1xl3q.jpg', link1: 'https://drive.google.com/file/d/1t1RSuiwkRpgtEDsgy9gtr75QNQ2PVaxL/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1t1RSuiwkRpgtEDsgy9gtr75QNQ2PVaxL&export=download' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ৪ খণ্ড', subtitle: 'প্রকাশক : মোঃ জিল্লুর রহমান জিলানী', img: 'https://files.catbox.moe/e55u8q.jpg', link1: 'https://drive.google.com/file/d/1g1x3M4jTcOqEsqgAzRWaoi_qj47rC1RT/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1g1x3M4jTcOqEsqgAzRWaoi_qj47rC1RT&export=download' },
+                { type: 'book', title: 'আবু দাউদ শরীফ - ৫ খণ্ড', subtitle: 'প্রকাশক : মোঃ জিল্লুর রহমান জিলানী', img: 'https://files.catbox.moe/1iv67p.jpg', link1: 'https://drive.google.com/file/d/1M7mP5_ckHlDGsVj2snFIqb0NPzhWTzVB/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1M7mP5_ckHlDGsVj2snFIqb0NPzhWTzVB&export=download' },
+            ],
+            
+            'nasai': [
+                { type: 'book', title: 'সুনান নাসাঈ শরীফ - ১ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/sgl3fl.jpg', link1: 'https://drive.google.com/file/d/19y1rLC9IkYSXQG-sD2UzFoKBVtsBY4xU/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=19y1rLC9IkYSXQG-sD2UzFoKBVtsBY4xU&export=download' },
+                { type: 'book', title: 'সুনান নাসাঈ শরীফ - ২ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/sgl3fl.jpg', link1: 'https://drive.google.com/file/d/1qf_Itvejlmd99QFX3U9i0NLNL79XJK0A/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1qf_Itvejlmd99QFX3U9i0NLNL79XJK0A&export=download' },
+                { type: 'book', title: 'সুনান নাসাঈ শরীফ - ৩ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/sgl3fl.jpg', link1: 'https://drive.google.com/file/d/15WN0bozCTJvdrCiN6BrLFnx74mQCnWhf/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=15WN0bozCTJvdrCiN6BrLFnx74mQCnWhf&export=download' },
+                { type: 'book', title: 'সুনান নাসাঈ শরীফ - ৪ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/sgl3fl.jpg', link1: 'https://drive.google.com/file/d/1ha1ObP5i2JHuhbwrpdsrAw7SgQCuzsjG/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1ha1ObP5i2JHuhbwrpdsrAw7SgQCuzsjG&export=download' }
+            ],
+            'ibn_majah': [
+                { type: 'book', title: 'সুনান ইবনু মাজাহ - ১ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/m2vkvp.jpg', link1: 'https://drive.google.com/file/d/1e4uu2kartmzgcPUsJIGRSXrnstWuqYmq/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1e4uu2kartmzgcPUsJIGRSXrnstWuqYmq&export=download' },
+                { type: 'book', title: 'সুনান ইবনু মাজাহ - ২ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/m2vkvp.jpg', link1: 'https://drive.google.com/file/d/1-lixSqrssRT04P5LG2gkghvKm1pCBuIq/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1-lixSqrssRT04P5LG2gkghvKm1pCBuIq&export=download' },
+                { type: 'book', title: 'সুনান ইবনু মাজাহ - ৩ খণ্ড', subtitle: 'তাওহীদ পাবলিকেশন', img: 'https://files.catbox.moe/m2vkvp.jpg', link1: 'https://drive.google.com/file/d/1GncM-Bil8X5-DnSvDXYczt9UQNeJUCtA/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1GncM-Bil8X5-DnSvDXYczt9UQNeJUCtA&export=download' }
+            ],
+            'daraqutni': [
+                { type: 'book', title: 'সুনান আদ-দারাকুতনী - ১ খণ্ড', subtitle: 'হাদিস গ্রন্থ', img: 'https://files.catbox.moe/op7nvh.jpg', link1: 'https://drive.google.com/file/d/19Xu_EkXlZcwepIW8unojRCkNH8tZ0Ift/view?usp=drivesdk-', link2: 'https://drive.google.com/uc?id=19Xu_EkXlZcwepIW8unojRCkNH8tZ0Ift&export=download' },
+             ],
+             'Imam_Malik':[
+              { type: 'book', title: 'মুওয়াত্তা-ইমাম-মালিক- ১ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/62we4l.jpg', link1: 'https://drive.google.com/file/d/1J_AycU3bMfHk14CTauT2S9iqOaMmAJCK/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1J_AycU3bMfHk14CTauT2S9iqOaMmAJCK&export=download' },
+              { type: 'book', title: 'মুওয়াত্তা-ইমাম-মালিক - ২ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/o7ihfo.jpg', link1: 'https://drive.google.com/file/d/1wJLE8JrhbRDfuK4wzCsGR16XXjSiDBFF/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1wJLE8JrhbRDfuK4wzCsGR16XXjSiDBFF&export=download' },
+              ],
+              'muslim2': [    
+
+              { type: 'book', title: 'সহীহ মুসলিম - ১ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/1j930s.png', link1: 'https://drive.google.com/file/d/1xNgFCNNP5nA4JjELIz1K0P-w2JRCRffL/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1xNgFCNNP5nA4JjELIz1K0P-w2JRCRffL&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ২ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/1j930s.png', link1: 'https://drive.google.com/file/d/17ZsuDzVznIF9Vvpx9iJrHA1ehAGAw-G0/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=17ZsuDzVznIF9Vvpx9iJrHA1ehAGAw-G0&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৩ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/1j930s.png', link1: 'https://drive.google.com/file/d/1FjftW9JZOdxcut7ahFcFY92a8Pg7_jaH/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1FjftW9JZOdxcut7ahFcFY92a8Pg7_jaH&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৪ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/1j930s.png', link1: 'https://drive.google.com/file/d/1IE61zyRyyDIRmF2U6F4vdT7SsKAekkxe/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1IE61zyRyyDIRmF2U6F4vdT7SsKAekkxe&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৫ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/1j930s.png', link1: 'https://drive.google.com/file/d/1WHWvmxpHVKVmbNYsB3fK1fov9XAmvPi3/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1WHWvmxpHVKVmbNYsB3fK1fov9XAmvPi3&export=download' },
+              { type: 'book', title: 'সহীহ মুসলিম - ৬ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/1j930s.png', link1: 'https://drive.google.com/file/d/1haxuS_jVvOvGKUZR3kv_ygMLEr9c_WhN/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1haxuS_jVvOvGKUZR3kv_ygMLEr9c_WhN&export=download' },
+
+            ],
+            'bukhari2': [
+             
+              { type: 'book', title: 'সহীহ বুখারী  ১ খণ্ড', subtitle:'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1sxU_jVIj_WafTghhGNb1caS3GRK-aNuD/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1sxU_jVIj_WafTghhGNb1caS3GRK-aNuD&export=download'},
+              { type: 'book', title: 'সহীহ বুখারী ২ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1qeq7-0pfyvTQpqeykjkN2y9hCM0mEh_9/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1qeq7-0pfyvTQpqeykjkN2y9hCM0mEh_9&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৩ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1nXefIOHCP6wfyW3bdauhAGb0GzojJUEq/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1nXefIOHCP6wfyW3bdauhAGb0GzojJUEq&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৪ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1EQ57acma2kyhMktGYe2K0QYIAAHp05e1/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1EQ57acma2kyhMktGYe2K0QYIAAHp05e1&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৫ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1Q6dERADUqfd79dkJFNcy0UCDrSN8di-o/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1Q6dERADUqfd79dkJFNcy0UCDrSN8di-o&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৬ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1fh_Lh9UW9TS07vbXK-hyeSBX0erYDXSP/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1fh_Lh9UW9TS07vbXK-hyeSBX0erYDXSP&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৭ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/19J4-bc479VEpUZpRSGuITj5h1vgsLk1k/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=19J4-bc479VEpUZpRSGuITj5h1vgsLk1k&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৮ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1hdfIVR9wEWZVsER3fJe3jMMBDJ5-K0Dm/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1hdfIVR9wEWZVsER3fJe3jMMBDJ5-K0Dm&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ৯ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1HROQ1ASIZFZvizckEaycoRlDYAM6VObI/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1HROQ1ASIZFZvizckEaycoRlDYAM6VObI&export=download' },
+              { type: 'book', title: 'সহীহ বুখারী ১০ খণ্ড', subtitle:'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/3qu0l3.png', link1: 'https://drive.google.com/file/d/1dDl8TmLJTdggQl0X6mo3el1PTpnyvQft/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1dDl8TmLJTdggQl0X6mo3el1PTpnyvQft&export=download'},
+
+              ],
+            'al_bidaya_wal_nihaya': [
+            
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ১ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/w6vuoj.jpg', link1: 'https://drive.google.com/file/d/1SQWLU0iuRMyVOTvdBxqEHhM-5kE062CN/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1SQWLU0iuRMyVOTvdBxqEHhM-5kE062CN&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ২ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/qzl21c.jpg', link1: 'https://drive.google.com/file/d/1CAVEby2q74-2tpu68NR6OY87kJnRAqBk/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1CAVEby2q74-2tpu68NR6OY87kJnRAqBk&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৩ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/q2zf5j.jpg', link1: 'https://drive.google.com/file/d/1OIOm156ggbCgpKlz_wzy7Yqv7L09kAnw/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1OIOm156ggbCgpKlz_wzy7Yqv7L09kAnw&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৪ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/m3kgvt.jpg', link1: 'https://drive.google.com/file/d/1nPmdC5JuSz0kPSizq74N2JpiEpNOK6jJ/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1nPmdC5JuSz0kPSizq74N2JpiEpNOK6jJ&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৫ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/ju4hzq.jpg', link1: 'https://drive.google.com/file/d/1k_YAnRNAw33GeEm7ylCq7SG1wo82sA8P/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1k_YAnRNAw33GeEm7ylCq7SG1wo82sA8P&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৬ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/ym4w8s.jpg', link1: 'https://drive.google.com/file/d/1mb7Mh7uFHaZlsWlxUVosPtRlhd4KHHJG/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1mb7Mh7uFHaZlsWlxUVosPtRlhd4KHHJG&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৭ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/wvihbu.jpg', link1: 'https://drive.google.com/file/d/1nJvhc_jFNTIsuEZPAjp4k9bpx-2yIjiX/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1nJvhc_jFNTIsuEZPAjp4k9bpx-2yIjiX&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৮ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/in3b75.jpg', link1: 'https://drive.google.com/file/d/11Y996AblH1oq_il6VSObYn0qCn0job5W/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=11Y996AblH1oq_il6VSObYn0qCn0job5W&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ৯ খণ্ড', subtitle: 'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/9fixog.jpg', link1: 'https://drive.google.com/file/d/1bVWmNNRbceKJDZjpTzgXx9yxJMsBmoTg/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1bVWmNNRbceKJDZjpTzgXx9yxJMsBmoTg&export=download' },
+            { type: 'book', title: 'আল বিদায়া ওয়ান নিহায়া ১০ খণ্ড', subtitle:'ইসলামিক ফাউন্ডেশন', img: 'https://files.catbox.moe/v6d8a6.jpg', link1: 'https://drive.google.com/file/d/1OALINtvM7bD2m7IVmiD8i7N342keyUv6/view?usp=drivesdk', link2: 'https://drive.google.com/uc?id=1OALINtvM7bD2m7IVmiD8i7N342keyUv6&export=download'},
+            
+              ],
+            
+            // --- 🎧 ১১৪ সূরা অডিও সম্পূর্ণ লিস্ট ---
+            'quran_audio': [
+                { type: 'audio', title: '১. সূরা আল-ফাতিহা', subtitle: 'মক্কী | আয়াত ৭', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/1.%20Surah%20Al-Fatiha.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/1.%20Surah%20Al-Fatiha.mp3' },
+                { type: 'audio', title: '২. সূরা আল-বাকারা', subtitle: 'মাদানী | আয়াত ২৮৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/2.%20Surah%20Al-Baqarah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/1.%20Surah%20Al-Fatiha.mp3' },
+                { type: 'audio', title: '৩. সূরা আলে ইমরান', subtitle: 'মাদানী | আয়াত ২০০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/3.%20Surah%20Al-Imran.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/3.%20Surah%20Al-Imran.mp3' },
+                { type: 'audio', title: '৪. সূরা আন নিসা', subtitle: 'মাদানী | আয়াত ১৭৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/4.%20Surah%20An-Nisa.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/4.%20Surah%20An-Nisa.mp3' },
+                { type: 'audio', title: '৫. সূরা আল মায়িদা', subtitle: 'মাদানী | আয়াত ১২০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/5.%20Surah%20Al-Ma%27idah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/5.%20Surah%20Al-Ma%27idah.mp3' },
+                { type: 'audio', title: '৬. সূরা আল আনআম', subtitle: 'মাক্কী | আয়াত ১৬৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/6.%20Surah%20Al-An%27am.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/6.%20Surah%20Al-An%27am.mp3' },
+                { type: 'audio', title: '৭. সূরা আল আরাফ', subtitle: 'মাক্কী | আয়াত ২০৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/7.%20Surah%20Al-A%27raf.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/7.%20Surah%20Al-A%27raf.mp3' },
+                { type: 'audio', title: '৮. সূরা আল আনফাল', subtitle: 'মাদানী | আয়াত ৭৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/8.%20Surah%20Al-Anfal.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/8.%20Surah%20Al-Anfal.mp3' },
+                { type: 'audio', title: '৯. সূরা আত তাওবাহ', subtitle: 'মাদানী | আয়াত ১২৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/9.%20Surah%20At-Tawbah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/9.%20Surah%20At-Tawbah.mp3' },
+                { type: 'audio', title: '১০. সূরা ইউনুস', subtitle: 'মাক্কী | আয়াত ১০৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/10.%20Surah%20Yunus.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/10.%20Surah%20Yunus.mp3' },
+                { type: 'audio', title: '১১. সূরা হুদ', subtitle: 'মাক্কী | আয়াত ১২৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/11.%20Surah%20Hud.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/111.%20%20Sura%20%20Al%20%20Lahab.mp3' },
+                { type: 'audio', title: '১২. সূরা ইউসুফ', subtitle: 'মাক্কী | আয়াত ১১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/12.%20Surah%20Yusuf.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/12.%20Surah%20Yusuf.mp3' },
+                { type: 'audio', title: '১৩. সূরা আর রাদ', subtitle: 'মাদানী | আয়াত ৪৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/13.%20Surah%20Ar-Ra%27d.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/13.%20Surah%20Ar-Ra%27d.mp3' },
+                { type: 'audio', title: '১৪. সূরা ইবরাহীম', subtitle: 'মাক্কী | আয়াত ৫২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/14.%20Surah%20Ibrahim.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/14.%20Surah%20Ibrahim.mp3' },
+                { type: 'audio', title: '১৫. সূরা আল হিজর', subtitle: 'মাক্কী | আয়াত ৯৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/15.%20Surah%20Al-Hijr.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/15.%20Surah%20Al-Hijr.mp3' },
+                { type: 'audio', title: '১৬. সূরা আন নাহল', subtitle: 'মাক্কী | আয়াত ১২৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/16.%20Surah%20An-Nahl.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/16.%20Surah%20An-Nahl.mp3' },
+                { type: 'audio', title: '১৭. সূরা আল ইসরা', subtitle: 'মাক্কী | আয়াত ১১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/17.%20Surah%20Bani%20Isra%27il.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/17.%20Surah%20Bani%20Isra%27il.mp3' },
+                { type: 'audio', title: '১৮. সূরা আল কাহফ', subtitle: 'মাক্কী | আয়াত ১১০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/18.%20Surah%20Al-Kahf.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/18.%20Surah%20Al-Kahf.mp3' },
+                { type: 'audio', title: '১৯. সূরা মারইয়াম', subtitle: 'মাক্কী | আয়াত ৯৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/19.%20Surah%20Maryam.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/19.%20Surah%20Maryam.mp3' },
+                { type: 'audio', title: '২০. সূরা ত্বোয়া-হা', subtitle: 'মাক্কী | আয়াত ১৩৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/20%20Surah%20Taha.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/20%20Surah%20Taha.mp3' },
+                { type: 'audio', title: '২১. সূরা আল আম্বিয়া', subtitle: 'মাক্কী | আয়াত ১১২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/21.%20Surah%20Al-Anbiya.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/21.%20Surah%20Al-Anbiya.mp3' },
+                { type: 'audio', title: '২২. সূরা আল হাজ্জ', subtitle: 'মাদানী | আয়াত ৭৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/22.%20Surah%20Al-Hajj.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/22.%20Surah%20Al-Hajj.mp3' },
+                { type: 'audio', title: '২৩. সূরা আল মুমিনুন', subtitle: 'মাক্কী | আয়াত ১১৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/23.%20Surah%20Al-Mu%27minun.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/23.%20Surah%20Al-Mu%27minun.mp3' },
+                { type: 'audio', title: '২৪. সূরা আন নূর', subtitle: 'মাদানী | আয়াত ৬৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/24.%20Surah%20An-Nur.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/24.%20Surah%20An-Nur.mp3' },
+                { type: 'audio', title: '২৫. সূরা আল ফুরকান', subtitle: 'মাক্কী | আয়াত ৭৭', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/25.%20Surah%20Al-Furqan.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/25.%20Surah%20Al-Furqan.mp3' },
+                { type: 'audio', title: '২৬. সূরা আশ শুআরা', subtitle: 'মাক্কী | আয়াত ২২৭', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/26.%20Ash-Shu%27ara.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/26.%20Ash-Shu%27ara.mp3' },
+                { type: 'audio', title: '২৭. সূরা আন নামল', subtitle: 'মাক্কী | আয়াত ৯৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/27.%20Surah%20An-Naml.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/27.%20Surah%20An-Naml.mp3' },
+                { type: 'audio', title: '২৮. সূরা আল কাসাস', subtitle: 'মাক্কী | আয়াত ৮৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/28.%20Surah%20Al-Qasas.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/28.%20Surah%20Al-Qasas.mp3' },
+                { type: 'audio', title: '২৯. সূরা আল আনকাবুত', subtitle: 'মাক্কী | আয়াত ৬৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/29.%20Surah%20Al-Ankabut.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/29.%20Surah%20Al-Ankabut.mp3' },
+                { type: 'audio', title: '৩০. সূরা আর রুম', subtitle: 'মাক্কী | আয়াত ৬০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/30.%20Surah%20Ar-Rum.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/30.%20Surah%20Ar-Rum.mp3' },
+                { type: 'audio', title: '৩১. সূরা লুকমান', subtitle: 'মাক্কী | আয়াত ৩৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/31.%20Surah%20Luqman.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/31.%20Surah%20Luqman.mp3' },
+                { type: 'audio', title: '৩২. সূরা আস সাজদাহ', subtitle: 'মাক্কী | আয়াত ৩০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/32.%20Surah%20As-Sajdah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/32.%20Surah%20As-Sajdah.mp3' },
+                { type: 'audio', title: '৩৩. সূরা আল আহযাব', subtitle: 'মাদানী | আয়াত ৭৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/33.%20Surah%20Al-Ahzab.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/33.%20Surah%20Al-Ahzab.mp3' },
+                { type: 'audio', title: '৩৪. সূরা সাবা', subtitle: 'মাক্কী | আয়াত ৫৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/34.%20Surah%20Saba.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/34.%20Surah%20Saba.mp3' },
+                { type: 'audio', title: '৩৫. সূরা ফাতির', subtitle: 'মাক্কী | আয়াত ৪৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/35.%20Surah%20Fatir.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/35.%20Surah%20Fatir.mp3' },
+                { type: 'audio', title: '৩৬. সূরা ইয়াসীন', subtitle: 'মাক্কী | আয়াত ৮৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/36.%20Surah%20Yasin.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/36.%20Surah%20Yasin.mp3' },
+                { type: 'audio', title: '৩৭. সূরা আস ছাফফাত', subtitle: 'মাক্কী | আয়াত ১৮২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/37.%20Surah%20As-Saffat.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/37.%20Surah%20As-Saffat.mp3' },
+                { type: 'audio', title: '৩৮. সূরা ছোয়াদ', subtitle: 'মাক্কী | আয়াত ৮৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/38.%20Surah%20Sad.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/38.%20Surah%20Sad.mp3' },
+                { type: 'audio', title: '৩৯. সূরা আয যুমার', subtitle: 'মাক্কী | আয়াত ৭৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/39.%20Surah%20Az-Zumar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/39.%20Surah%20Az-Zumar.mp3' },
+                { type: 'audio', title: '৪০. সূরা গাফির (আল মুমিন)', subtitle: 'মাক্কী | আয়াত ৮৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/40.%20Surah%20Al-Mu%27min.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/40.%20Surah%20Al-Mu%27min.mp3' },
+                { type: 'audio', title: '৪১. সূরা ফুসসিলাত', subtitle: 'মাক্কী | আয়াত ৫৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/41.%20%20Sura%20%20Ha-Meem%20As%20Sajdah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/41.%20%20Sura%20%20Ha-Meem%20As%20Sajdah.mp3' },
+                { type: 'audio', title: '৪২. সূরা আশ শূরা', subtitle: 'মাক্কী | আয়াত ৫৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/42.%20Sura%20Ashshura.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/42.%20Sura%20Ashshura.mp3' },
+                { type: 'audio', title: '৪৩. সূরা আয যুখরুফ', subtitle: 'মাক্কী | আয়াত ৮৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/43.%20Sura%20Jukhrof.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/43.%20Sura%20Jukhrof.mp3' },
+                { type: 'audio', title: '৪৪. সূরা আদ দুখান', subtitle: 'মাক্কী | আয়াত ৫৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/44.%20Sura%20Ad%20Dokhan.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/44.%20Sura%20Ad%20Dokhan.mp3' },
+                { type: 'audio', title: '৪৫. সূরা আল জাসিয়াহ', subtitle: 'মাক্কী | আয়াত ৩৭', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/45.%20%20Sura%20%20Al%20%20Jasiah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/45.%20%20Sura%20%20Al%20%20Jasiah.mp3' },
+                { type: 'audio', title: '৪৬. সূরা আল আহকাফ', subtitle: 'মাক্কী | আয়াত ৩৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/46.%20%20Sura%20Al%20Ahqaf.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/46.%20%20Sura%20Al%20Ahqaf.mp3' },
+                { type: 'audio', title: '৪৭. সূরা মুহাম্মদ', subtitle: 'মাদানী | আয়াত ৩৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/47.%20%20Sura%20%20Mohmmed.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/47.%20%20Sura%20%20Mohmmed.mp3' },
+                { type: 'audio', title: '৪৮. সূরা আল ফাতহ', subtitle: 'মাদানী | আয়াত ২৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/48.%20%20Sura%20%20Al%20Fath.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/48.%20%20Sura%20%20Al%20Fath.mp3' },
+                { type: 'audio', title: '৪৯. সূরা আল হুজুরাত', subtitle: 'মাদানী | আয়াত ১৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/49.%20%20Sura%20Hujurat.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/49.%20%20Sura%20Hujurat.mp3' },
+                { type: 'audio', title: '৫০. সূরা ক্বাফ', subtitle: 'মাক্কী | আয়াত ৪৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/50.%20%20Sura%20%20Quaf.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/50.%20%20Sura%20%20Quaf.mp3' },
+                { type: 'audio', title: '৫১. সূরা আয যারিয়াত', subtitle: 'মাক্কী | আয়াত ৬০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/51.%20%20Sura%20%20Aj%20Jariat.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/51.%20%20Sura%20%20Aj%20Jariat.mp3' },
+                { type: 'audio', title: '৫২. সূরা আত তূর', subtitle: 'মাক্কী | আয়াত ৪৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/52.%20%20Sura%20At%20Toor.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/52.%20%20Sura%20At%20Toor.mp3' },
+                { type: 'audio', title: '৫৩. সূরা আন নাজম', subtitle: 'মাক্কী | আয়াত ৬২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/53.%20Sura%20An%20Najm.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/53.%20Sura%20An%20Najm.mp3' },
+                { type: 'audio', title: '৫৪. সূরা আল ক্বামার', subtitle: 'মাক্কী | আয়াত ৫৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/54.%20%20Sura%20Al%20Qamar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/54.%20%20Sura%20Al%20Qamar.mp3' },
+                { type: 'audio', title: '৫৫. সূরা আর রাহমান', subtitle: 'মাদানী | আয়াত ৭৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/55.%20Sura%20Ar%20%20Rahman.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/55.%20Sura%20Ar%20%20Rahman.mp3' },
+                { type: 'audio', title: '৫৬. সূরা আল ওয়াকিয়াহ', subtitle: 'মাক্কী | আয়াত ৯৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/56.%20%20Sura%20Al%20Waqea.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/56.%20%20Sura%20Al%20Waqea.mp3' },
+                { type: 'audio', title: '৫৭. সূরা আল হাদীদ', subtitle: 'মাদানী | আয়াত ২৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/57.%20%20Sura%20Al%20Hadeed.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/57.%20%20Sura%20Al%20Hadeed.mp3' },
+                { type: 'audio', title: '৫৮. সূরা আল মুজাদালাহ', subtitle: 'মাদানী | আয়াত ২২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: '#https://archive.org/download/1.-surah-al-fatiha/58.%20%20Sura%20Al%20Mojadela.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/58.%20%20Sura%20Al%20Mojadela.mp3' },
+                { type: 'audio', title: '৫৯. সূরা আল হাশর', subtitle: 'মাদানী | আয়াত ২৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/59.%20%20Sura%20Al%20Hashr.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/59.%20%20Sura%20Al%20Hashr.mp3' },
+                { type: 'audio', title: '৬০. সূরা আল মুমতাহিনাহ', subtitle: 'মাদানী | আয়াত ১৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/60.%20%20Sura%20Al%20Momtahana.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/60.%20%20Sura%20Al%20Momtahana.mp3' },
+                { type: 'audio', title: '৬১. সূরা আস সাফ', subtitle: 'মাদানী | আয়াত ১৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/61.%20Sura%20As%20%20Saf.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/61.%20Sura%20As%20%20Saf.mp3' },
+                { type: 'audio', title: '৬২. সূরা আল জুমুআহ', subtitle: 'মাদানী | আয়াত ১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/62.%20%20Sura%20Al%20Jumua.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/62.%20%20Sura%20Al%20Jumua.mp3' },
+                { type: 'audio', title: '৬৩. সূরা আল মুনাফিকুন', subtitle: 'মাদানী | আয়াত ১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/63.%20%20Sura%20Monafeqoon.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/63.%20%20Sura%20Monafeqoon.mp3' },
+                { type: 'audio', title: '৬৪. সূরা আত তাগাবুন', subtitle: 'মাদানী | আয়াত ১৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/64.%20%20Sura%20At%20Tagabon.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/64.%20%20Sura%20At%20Tagabon.mp3' },
+                { type: 'audio', title: '৬৫. সূরা আত তালাক', subtitle: 'মাদানী | আয়াত ১২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/65.%20Sura%20At%20Talaque.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/65.%20Sura%20At%20Talaque.mp3' },
+                { type: 'audio', title: '৬৬. সূরা আত তাহরীম', subtitle: 'মাদানী | আয়াত ১২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/66.%20%20Sura%20At%20Tahreem.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/66.%20%20Sura%20At%20Tahreem.mp3' },
+                { type: 'audio', title: '৬৭. সূরা আল মুলক', subtitle: 'মাক্কী | আয়াত ৩০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/67.%20Sura%20Al%20Mulk.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/67.%20Sura%20Al%20Mulk.mp3' },
+                { type: 'audio', title: '৬৮. সূরা আল কলম', subtitle: 'মাক্কী | আয়াত ৫২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/68.%20%20Sura%20Al%20Qalam.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/68.%20%20Sura%20Al%20Qalam.mp3' },
+                { type: 'audio', title: '৬৯. সূরা আল হাক্কাহ', subtitle: 'মাক্কী | আয়াত ৫২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/69.%20%20Sura%20%20Al%20Haqqah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/69.%20%20Sura%20%20Al%20Haqqah.mp3' },
+                { type: 'audio', title: '৭০. সূরা আল মাআরিজ', subtitle: 'মাক্কী | আয়াত ৪৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/70.%20%20Sura%20Al%20Ma%27rej.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/70.%20%20Sura%20Al%20Ma%27rej.mp3' },
+                { type: 'audio', title: '৭১. সূরা নূহ', subtitle: 'মাক্কী | আয়াত ২৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/71.%20Sura%20Nuh.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/71.%20Sura%20Nuh.mp3' },
+                { type: 'audio', title: '৭২. সূরা আল জিন', subtitle: 'মাক্কী | আয়াত ২৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/72.%20Sura%20Al%20Jin.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/72.%20Sura%20Al%20Jin.mp3' },
+                { type: 'audio', title: '৭৩. সূরা আল মুযযাম্মিল', subtitle: 'মাক্কী | আয়াত ২০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/73.%20Sura%20Al%20Muzzammel.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/73.%20Sura%20Al%20Muzzammel.mp3' },
+                { type: 'audio', title: '৭৪. সূরা আল মুদ্দাসসির', subtitle: 'মাক্কী | আয়াত ৫৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/74.%20Sura%20Al%20Muddasser.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/74.%20Sura%20Al%20Muddasser.mp3' },
+                { type: 'audio', title: '৭৫. সূরা আল কিয়ামাহ', subtitle: 'মাক্কী | আয়াত ৪০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/75.%20Sura%20Al%20Qeamah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/75.%20Sura%20Al%20Qeamah.mp3' },
+                { type: 'audio', title: '৭৬. সূরা আল ইনসান', subtitle: 'মাদানী | আয়াত ৩১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/76.%20Sura%20Ad%20Dahr.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/76.%20Sura%20Ad%20Dahr.mp3' },
+                { type: 'audio', title: '৭৭. সূরা আল মুরসালাত', subtitle: 'মাক্কী | আয়াত ৫০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/77.%20Sura%20Al%20Morsalat.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/77.%20Sura%20Al%20Morsalat.mp3' },
+                { type: 'audio', title: '৭৮. সূরা আন নাবা', subtitle: 'মাক্কী | আয়াত ৪০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/78.%20Sura%20Naba.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/78.%20Sura%20Naba.mp3' },
+                { type: 'audio', title: '৭۹. সূরা আন নাযিয়াত', subtitle: 'মাক্কী | আয়াত ৪৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/79.%20Sura%20An%20Nazeat.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/79.%20Sura%20An%20Nazeat.mp3' },
+                { type: 'audio', title: '৮০. সূরা আবাসা', subtitle: 'মাক্কী | আয়াত ৪২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/80.%20Sura%20Abasa.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/80.%20Sura%20Abasa.mp3' },
+                { type: 'audio', title: '৮১. সূরা আত তাকভীর', subtitle: 'মাক্কী | আয়াত ২৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/81.%20Sura%20At%20Takweer.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/81.%20Sura%20At%20Takweer.mp3' },
+                { type: 'audio', title: '৮২. সূরা আল ইনফিতার', subtitle: 'মাক্কী | আয়াত ১৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/82.%20%20Sura%20Al%20Infetar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/82.%20%20Sura%20Al%20Infetar.mp3' },
+                { type: 'audio', title: '৮৩. সূরা আল মুতাফফিফীন', subtitle: 'মাক্কী | আয়াত ৩৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/83.%20Sura%20Mutaeeffin.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/83.%20Sura%20Mutaeeffin.mp3' },
+                { type: 'audio', title: '৮৪. সূরা আল ইনশিকাক', subtitle: 'মাক্কী | আয়াত ২৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/84.%20Sura%20Al%20Insheqaq.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/84.%20Sura%20Al%20Insheqaq.mp3' },
+                { type: 'audio', title: '৮৫. সূরা আল বুরুজ', subtitle: 'মাক্কী | আয়াত ২২', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/85.%20%20Sura%20Al%20Buruj.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/85.%20%20Sura%20Al%20Buruj.mp3' },
+                { type: 'audio', title: '৮৬. সূরা আত তারিক', subtitle: 'মাক্কী | আয়াত ১৭', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/86.%20Sura%20At%20Tareq.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/86.%20Sura%20At%20Tareq.mp3' },
+                { type: 'audio', title: '৮৭. সূরা আল আ\'লা', subtitle: 'মাক্কী | আয়াত ১৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/87.%20Sura%20Al%20A%27la.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/87.%20Sura%20Al%20A%27la.mp3' },
+                { type: 'audio', title: '৮৮. সূরা আল গাশিয়াহ', subtitle: 'মাক্কী | আয়াত ২৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/88.%20Sura%20Al%20%20Ghshiah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/88.%20Sura%20Al%20%20Ghshiah.mp3' },
+                { type: 'audio', title: '৮৯. সূরা আল ফাজর', subtitle: 'মাক্কী | আয়াত ৩০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/89.%20Sura%20Al%20Fajar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/89.%20Sura%20Al%20Fajar.mp3' },
+                { type: 'audio', title: '৯০. সূরা আল বালাদ', subtitle: 'মাক্কী | আয়াত ২০', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/90.%20Sura%20Al%20Balad.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/90.%20Sura%20Al%20Balad.mp3' },
+                { type: 'audio', title: '৯১. সূরা আশ শামস', subtitle: 'মাক্কী | আয়াত ১৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/91.%20Sura%20Ash%20Shams.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/91.%20Sura%20Ash%20Shams.mp3' },
+                { type: 'audio', title: '৯২. সূরা আল লাইল', subtitle: 'মাক্কী | আয়াত ২১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/92.%20Sura%20Al%20Lail.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/92.%20Sura%20Al%20Lail.mp3' },
+                { type: 'audio', title: '৯৩. সূরা আদ দুহা', subtitle: 'মাক্কী | আয়াত ১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/93.%20Sura%20Ad%20Doha.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/93.%20Sura%20Ad%20Doha.mp3' },
+                { type: 'audio', title: '৯৪. সূরা আল ইনশিরাহ', subtitle: 'মাক্কী | আয়াত ৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/94.%20Sura%20Al%20Insherah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/94.%20Sura%20Al%20Insherah.mp3' },
+                { type: 'audio', title: '৯৫. সূরা আত ত্বীন', subtitle: 'মাক্কী | আয়াত ৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/95.%20Sura%20At%20Teen.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/95.%20Sura%20At%20Teen.mp3' },
+                { type: 'audio', title: '৯৬. সূরা আল আলাক', subtitle: 'মাক্কী | আয়াত ১৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/96.%20Sura%20Al%20Alaque.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/96.%20Sura%20Al%20Alaque.mp3' },
+                { type: 'audio', title: '৯৭. সূরা আল কদর', subtitle: 'মাক্কী | আয়াত ৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/97.%20Sura%20Al%20%20Qadar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/97.%20Sura%20Al%20%20Qadar.mp3' },
+                { type: 'audio', title: '৯৮. সূরা আল বাইয়্যিনাহ', subtitle: 'মাদানী | আয়াত ৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/98.%20Sura%20Al%20Bayenah.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/98.%20Sura%20Al%20Bayenah.mp3' },
+                { type: 'audio', title: '৯৯. সূরা আয যিলযাল', subtitle: 'মাদানী | আয়াত ۸', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/99.%20Sura%20Al%20Zelzal.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/99.%20Sura%20Al%20Zelzal.mp3' },
+                { type: 'audio', title: '১০০. সূরা আল আদিয়াত', subtitle: 'মাক্কী | আয়াত ১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/100.%20Sura%20Al%20%20Adiat.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/100.%20Sura%20Al%20%20Adiat.mp3' },
+                { type: 'audio', title: '১০১. সূরা আল কারিয়াহ', subtitle: 'মাক্কী | আয়াত ১১', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/101.%20Sura%20Al%20%20Qaria.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/101.%20Sura%20Al%20%20Qaria.mp3' },
+                { type: 'audio', title: '১০২. সূরা আত তাকাসুর', subtitle: 'মাক্কী | আয়াত ৮', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/102.%20Sura%20At%20Takasur.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/102.%20Sura%20At%20Takasur.mp3' },
+                { type: 'audio', title: '১০৩. সূরা আল আসর', subtitle: 'মাক্কী | আয়াত ৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/103.%20Sura%20Al%20%20Asar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/103.%20Sura%20Al%20%20Asar.mp3' },
+                { type: 'audio', title: '১০৪. সূরা আল হুমাযাহ', subtitle: 'মাক্কী | আয়াত ৯', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/104.%20Sura%20Al%20%20Humazha.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/104.%20Sura%20Al%20%20Humazha.mp3' },
+                { type: 'audio', title: '১০৫. সূরা আল ফীল', subtitle: 'মাক্কী | আয়াত ৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/105.%20Sura%20Al%20%20Feel.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/105.%20Sura%20Al%20%20Feel.mp3' },
+                { type: 'audio', title: '১০৬. সূরা কুরাইশ', subtitle: 'মাক্কী | আয়াত ৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/106.%20Sura%20%20Al%20%20Qurish.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/106.%20Sura%20%20Al%20%20Qurish.mp3' },
+                { type: 'audio', title: '১০৭. সূরা আল মাউন', subtitle: 'মাক্কী | আয়াত ৭', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/107.%20%20Sura%20%20Al%20%20Maun.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/107.%20%20Sura%20%20Al%20%20Maun.mp3' },
+                { type: 'audio', title: '১০৮. সূরা আল কাওসার', subtitle: 'মাক্কী | আয়াত ৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/108.%20%20Sura%20%20Al%20%20Kausar.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/108.%20%20Sura%20%20Al%20%20Kausar.mp3' },
+                { type: 'audio', title: '১০৯. সূরা আল কাফিরুন', subtitle: 'মাক্কী | আয়াত ৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/109.%20%20Sura%20%20Al%20%20Kaferoon.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/109.%20%20Sura%20%20Al%20%20Kaferoon.mp3' },
+                { type: 'audio', title: '১১০. সূরা আন নাসর', subtitle: 'মাদানী | আয়াত ৩', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/110.%20%20Sura%20%20An%20%20Nasr.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/110.%20%20Sura%20%20An%20%20Nasr.mp3' },
+                { type: 'audio', title: '১১১. সূরা আল লাহাব', subtitle: 'মাক্কী | আয়াত ৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/111.%20%20Sura%20%20Al%20%20Lahab.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/111.%20%20Sura%20%20Al%20%20Lahab.mp3' },
+                { type: 'audio', title: '১১২. সূরা আল ইখলাস', subtitle: 'মাক্কী | আয়াত ৪', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/112.%20%20Sura%20%20Al%20%20Ikhlas.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/112.%20%20Sura%20%20Al%20%20Ikhlas.mp3' },
+                { type: 'audio', title: '১১৩. সূরা আল ফালাক', subtitle: 'মাক্কী | আয়াত ৫', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/113.%20Sura%20Al%20Falaque.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/113.%20Sura%20Al%20Falaque.mp3' },
+                { type: 'audio', title: '১১৪. সূরা আন নাস', subtitle: 'মাক্কী | আয়াত ৬', img: 'https://i.ibb.co/wFwj3F0B/image.png', link1: 'https://archive.org/download/1.-surah-al-fatiha/114.%20Sura%20An%20Nas.mp3', link2: 'https://archive.org/download/1.-surah-al-fatiha/114.%20Sura%20An%20Nas.mp3' },
+            ]
+        };
+        
+        function openListView(dataId, titleName, backToCategoryId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-section'));
+            document.getElementById('list-view-section').classList.add('active-section');
+            
+            document.getElementById('list-title').innerText = titleName;
+            document.getElementById('back-btn').onclick = function() { switchCategory(backToCategoryId); };
+
+            const container = document.getElementById('list-container');
+            container.innerHTML = ''; 
+
+            const items = mainDatabase[dataId];
+            
+            if(items && items.length > 0) {
+                items.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.style.animation = `fadeIn 0.3s ease forwards ${index * 0.02}s`;
+                    div.style.opacity = "0";
+                    div.onclick = () => openModal(item);
+                    
+                    div.innerHTML = `
+                        <div class="list-number">${index + 1}</div>
+                        <img src="${item.img}" class="list-thumbnail" alt="Thumb">
+                        <div class="list-details">
+                            <div class="title">${item.title}</div>
+                            <div class="subtitle">${item.subtitle}</div>
+                        </div>
+                        <div class="click-icon">&#10095;</div>
+                    `;
+                    container.appendChild(div);
+                });
+            } else {
+                container.innerHTML = '<div style="text-align:center; padding: 40px; color: #aaa; font-size: 16px;">শীঘ্রই বই যুক্ত করা হবে ইনশাআল্লাহ!</div>';
+            }
+        }
+
+        function openModal(item) {
+            document.getElementById('modal-img').src = item.img;
+            document.getElementById('modal-title').innerText = item.title;
+            document.getElementById('modal-subtitle').innerText = item.subtitle;
+
+            const ext = item.type === 'audio' ? '.mp3' : '.pdf';
+            const downloadFileName = item.title.replace(/[/\\?%*:|"<>]/g, '-') + ext;
+
+            const readBtn = document.getElementById('modal-read-btn');
+            const downloadBtn = document.getElementById('modal-download-btn');
+            const audioPlayer = document.getElementById('modal-audio-player');
+
+            if(item.type === 'audio') {
+                readBtn.style.display = 'none';
+                audioPlayer.style.display = 'block';
+                audioPlayer.src = item.link1; 
+            } else {
+                audioPlayer.style.display = 'none';
+                audioPlayer.pause(); 
+                readBtn.style.display = 'inline-flex';
+                
+                // একই পেজে ফুলস্ক্রিন রিডারে ওপেন করবে
+                readBtn.onclick = function() {
+                    if(item.link1 && item.link1 !== '#') {
+                        openInPageReader(item.link1, item.title);
+                    } else {
+                        alert("দুঃখিত, এই বইটির পড়ার লিংক এখনও যুক্ত করা হয়নি!");
+                    }
+                };
+            }
+
+            // এখানে ডাউনলোড বাটনের সাথে আমাদের নতুন ফাংশনটি যুক্ত করা হয়েছে
+            downloadBtn.onclick = function() {
+                startDirectDownload(item.link2, downloadFileName);
+            };
+            
+            document.getElementById('contentModal').classList.add('show');
+        }
+
+        function closeModal() { 
+            document.getElementById('contentModal').classList.remove('show');
+            document.getElementById('modal-audio-player').pause(); 
+        }
+
+        window.onclick = function(event) { 
+            if (event.target == document.getElementById('contentModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
